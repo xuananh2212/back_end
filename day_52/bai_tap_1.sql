@@ -23,8 +23,7 @@ CREATE TABLE courses(
 );
 --2. Thêm trường description trước trường detail với kiểu dữ liệu (text) và ràng buộc (null) sau:
 ALTER TABLE courses
-ADD COLUMN description TEXT
-BEFORE detail;
+ADD COLUMN description TEXT;
 /*
 -3. Tạo bảng teacher có cấu trúc như sau
 	id => Kiểu int, NOT NULL
@@ -39,7 +38,7 @@ CREATE TABLE public.teacher(
 	bio TEXT,
 	created_at TIMESTAMP with TIME ZONE,
 	updated_at TIMESTAMP with TIME ZONE
-)
+);
 
 --4. Thêm 3 giảng viên vào bảng teacher
 INSERT INTO teacher(id , name , bio , created_at, updated_at)
@@ -56,7 +55,7 @@ VALUES (1, 'Toán cao cấp 1', 100.000, 'Toán cao cấp 1...', 1, 1, NOW()
 	   (6, 'cấu trúc dữ liệu 3', 100.000, 'cấu trúc dữ liệu 3...', 2, 0, NOW(), NOW()),
 	   (7, 'lập trình cơ bản 1', 200.000, 'lập trình cơ bản 1...', 3, 1, NOW(), NOW()),
 	   (8, 'lập trình cơ bản 2', 900.000, 'lập trình cơ bản 2...', 3, 1, NOW(), NOW()),
-	   (9, 'lập trình cơ bản 3', 100.000, 'lập trình cơ bản 3...', 3, 0, NOW(), NOW())
+	   (9, 'lập trình cơ bản 3', 100.000, 'lập trình cơ bản 3...', 3, 0, NOW(), NOW());
 	   
 --6. Sửa tên và giá từng khóa học thành tên mới và giá mới (Tên khóa học, giá khóa học các khóa học không được giống nhau)
 --6.1 Tên khóa học, giá khóa học các khóa học không được giống nhau
@@ -100,10 +99,10 @@ $$
 
 
 --8. Hiển thị danh sách giảng viên
-SELECT * FROM teacher
+SELECT * FROM teacher;
 
 --9. Hiển thị danh sách khóa học
-SELECT * FROM courses
+SELECT * FROM courses;
 
 
 	   
