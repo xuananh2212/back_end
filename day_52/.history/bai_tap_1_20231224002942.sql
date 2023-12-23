@@ -50,7 +50,7 @@ ALTER COLUMN content SET NOT NULL;
 	updated_at => Kiểu timestamp
 */
 CREATE TABLE teacher(
-     id INT NOT NULL,
+    id INT NOT NULL,
 	name varchar(50) NOT NULL,
 	bio TEXT,
 	created_at TIMESTAMP with TIME ZONE,
@@ -67,7 +67,7 @@ VALUES    (1, 'NGuyễn Thị A', 'có 1 năm kinh nghiệm làm việc', N
 --5.  mỗi giảng viên thêm 3 khóa học
 
 INSERT INTO courses(id, name , price, content,teacher_id, active, created_at, updated_at)
-VALUES  (1, 'Toán cao cấp 1', 100000, 'Toán cao cấp 1...', 1, 1, NOW(), NOW()),
+VALUES (1, 'Toán cao cấp 1', 100000, 'Toán cao cấp 1...', 1, 1, NOW(), NOW()),
 	   (2, 'Toán cao cấp 2', 100000, 'Toán cao cấp 2...', 1, 0, NOW(), NOW()),
 	   (3, 'Toán cao cấp 3', 400000, 'Toán cao cấp 3...', 1, 1, NOW(), NOW()),
 	   (4, 'cấu trúc dữ liệu 1', 100000, 'cấu trúc dữ liệu 1...', 2, 1, NOW(), NOW()),

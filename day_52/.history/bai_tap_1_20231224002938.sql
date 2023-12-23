@@ -50,7 +50,7 @@ ALTER COLUMN content SET NOT NULL;
 	updated_at => Kiểu timestamp
 */
 CREATE TABLE teacher(
-     id INT NOT NULL,
+    id INT NOT NULL,
 	name varchar(50) NOT NULL,
 	bio TEXT,
 	created_at TIMESTAMP with TIME ZONE,
