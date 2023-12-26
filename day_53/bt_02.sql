@@ -111,6 +111,74 @@ ALTER TABLE orders_detail
 ADD CONSTRAINT orders_detail_product_id_fk
 FOREIGN KEY (product_id) 
 REFERENCES products(id);
+-- THÊM DỮ LIỆU CHO TỪNG BẢNG
+INSERT INTO customers(name ,email, password,created_at, updated_at)
+VALUES('user1', 'user1@gmail.com', '123456', NOW() , NOW()),
+	  ('user2', 'user2@gmail.com', '123456', NOW() , NOW()),
+	  ('user3', 'user2@gmail.com', '123456', NOW() , NOW())
+	  
+INSERT INTO phones (name, customer_id)
+VALUES  ('0981089128', 1),
+		('0981089121', 2),
+		('0981089124', 3)
+
+INSERT INTO products_category(name)
+VALUES  ('điện tử'),
+		('đồ ăn vặt'),
+		('quần áo')
+
+INSERT INTO products(name,product_code , description, price, thumbnail, total_quantity,product_category_id , created_at, updated_at)
+VALUES ('MÁY TÍNH 1', 'mk1001', 'desc1', 10000, 'https://www.bing.com/images/1', 100, 1, NOW() ,NOW()),
+	   ('MÁY TÍNH 2', 'mk1002', 'desc1', 15000, 'https://www.bing.com/images/2', 10, 1, NOW() ,NOW()),
+	   ('MÁY TÍNH 3', 'mk1003', 'desc1', 11000, 'https://www.bing.com/images/3', 110, 1, NOW() ,NOW()),
+	   ('ĐỒ ĂN VẶT 1', 'DAV1004', 'desc1', 11000, 'https://www.bing.com/images/4', 90, 2, NOW() ,NOW()),
+	   ('QUẦN ÁO 1', 'qa1005', 'desc1', 11000, 'https://www.bing.com/images/5', 90, 3, NOW() ,NOW())
+
+INSERT INTO status(name)
+VALUES('ĐANG CHỜ'),
+	  ('ĐANG VẬN CHUYỂN'),
+	  ('ĐÃ XÁC NHẬN'),
+	  ('ĐÃ HUỶ'),
+	  ('Đã Thành công')
+
+INSERT INTO orders(total_quantity, total_amount, customer_id, status_id, created_at, updated_at)
+VALUES(3, 36000, 1 , 1, NOW(), NOW()),
+      (3, 37000, 2 , 1, NOW(), NOW())
+	  
+	  
+INSERT INTO orders_detail(order_id, product_id , quantity, created_at, updated_at)
+VALUES(1,1,1,NOW(), NOW()),
+      (1,2,1,NOW(), NOW()),
+	  (1,3,1, NOW(), NOW()),
+	  (2,2,1, NOW(), NOW()),
+	  (2,3,1, NOW(), NOW()),
+	  (2,4,1, NOW(), NOW())
+	   
+
+/*
+	1. Xem danh sách đơn hàng
+	Tên khách hàng
+	Email khách hàng
+	Số điện thoại khách hàng
+	Tổng số lượng sản phẩm
+	Tổng tiền đơn hàng
+	Trạng thái đơn hàng
+	Thời gian đặt hàng
+*/
+SELECT  customers.name, 
+		customers.email, 
+		phones.name , 
+		orders.total_quantity,
+		orders.total_amount, 
+		orders.created_at,
+		orders.status_id
+FROM customers
+JOIN phones 
+ON customers.id = phones.customer_id
+JOIN orders
+ON customers.id = orders.customer_id
+
+
 
 
 
