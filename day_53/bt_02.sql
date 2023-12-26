@@ -178,6 +178,33 @@ ON customers.id = phones.customer_id
 JOIN orders
 ON customers.id = orders.customer_id
 
+/*
+2. Xem chi tiết đơn hàng
+Tên khách hàng
+Email khách hàng
+Số điện thoại khách hàng
+Danh sách sản phẩm trong đơn hàng: Tên, Mã sản phẩm, giá, số lượng, tổng tiền từng sản phẩm
+Trạng thái đơn hàng
+Thời gian tạo đơn hàng
+Thời gian cập nhật cuối cùng
+
+*/
+SELECT  customers.name, 
+		customers.email, 
+		phones.name , 
+		orders.created_at as time_start_order,
+		orders.updated_at as time_update_order,
+		orders.status_id,
+		products.*
+FROM customers
+JOIN phones 
+ON customers.id = phones.customer_id
+JOIN orders
+ON customers.id = orders.customer_id
+JOIN orders_detail
+ON orders.id = orders_detail.order_id
+JOIN products
+ON orders_detail.product_id = products.id
 
 
 
