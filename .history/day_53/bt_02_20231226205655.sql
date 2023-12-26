@@ -10,7 +10,7 @@ CREATE DATABASE database_02_xuananh;
    - products_category - products: (1 - n) => 1 danh mục có thể chứa 1 hoặc nhiều sản phẩm  (1 sản phẩm chỉ được nằm ở 1 danh mục)
    - products - orders_detail : (1 - n) => 1 sản phẩm có thể nằm ở 1 hoặc nhiều đơn hàng chi tiết.
    - orders - orders_detail : (1 - n) => 1 đơn đặt hàng có thể có 1 hoặc nhiều đơn hàng chi tiết.
-   - status - orders: (1 -n) => 1 trạng thái đơn hàng có thể nằm ở 1 hoặc nhiều đơn hàng (1 đơn hàng chỉ có 1 trạng thái đơn hàng)
+   - status - orders: (1 -n) => 1 trạng thái đơn hàng có thể có 1 hoặc nhiều đơn hàng (1 đơn hàng chỉ có 1 trạng thái đơn hàng)
    
 */
 
