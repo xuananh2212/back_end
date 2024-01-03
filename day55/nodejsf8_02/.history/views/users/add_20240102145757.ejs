@@ -1,0 +1,23 @@
+<form>
+     <div class="row mt-3">
+          <div class="col-3">
+               <select name="status" class="form-control">
+                    <option value="all">Tat ca
+                    </option>
+                    <option value="active" selected=<%=statusBool==='active' ? 'selected' : '' %> >kich hoat
+                    </option>
+                    <option value="inactive" selected=<%=statusBool==='inactive' ? 'selected' : '' %> >chua kich hoat
+                    </option>
+               </select>
+          </div>
+
+          <div class="col-7">
+               <input class="form-control" name="keyword" id="keyword" type="search" placeholder="tu khoa tim kiem"
+                    value=<%=keyword %>>
+          </div>
+          <div class="col-2 d-grid">
+               <button>tim kiem</button>
+          </div>
+
+     </div>
+</form>

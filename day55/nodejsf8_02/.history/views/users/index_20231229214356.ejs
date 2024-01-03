@@ -1,0 +1,40 @@
+<h1>danh sach nguoi dung</h1>
+<table>
+     <thead>
+          <tr>
+               <th>STT</th>
+               <th>Ten</th>
+               <th>Email</th>
+               <th>Trang thai</th>
+               <th>Thoi gian</th>
+               <th width="5%">Sua</th>
+               <th width="5%">Xoa</th>
+          </tr>
+     </thead>
+     <tbody>
+          <% users.forEach(({id, name, email, status, created_at}, index)=> { %>
+               <td>
+                    <%= index + 1 %>
+               </td>
+               <td>
+                    <%= name %>
+               </td>
+               <td>
+                    <%= email %>
+               </td>
+               <td>
+                    <%= status %>
+               </td>
+               <td>
+                    <%= created_at %>
+               </td>
+               <td>
+                    <a href="#">sua</a>
+               </td>
+               <td>
+                    <a href="#">xoa</a>
+               </td>
+               <% }) %>
+
+     </tbody>
+</table>

@@ -1,0 +1,22 @@
+<h1>danh sach nguoi dung</h1>
+<table>
+     <thead>
+          <tr>
+               <th>STT</th>
+               <th>Ten</th>
+               <th>Email</th>
+               <th>Trang thai</th>
+               <th>Thoi gian</th>
+               <th width="5%">Sua</th>
+               <th width="5%">Xoa</th>
+          </tr>
+     </thead>
+     <tbody>
+          <% users.forEach((item)=> { %>
+               <h3>
+                    <%- item %>
+               </h3>
+               <% }) %>
+
+     </tbody>
+</table>

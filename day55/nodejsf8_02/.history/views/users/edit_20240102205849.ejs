@@ -1,0 +1,40 @@
+<form method="post">
+     <div class="mt-3">
+          <div class="row mt-3">
+               <div class="col-3">
+                    <label for="name">Tên:</label>
+               </div>
+               <div class="col-9">
+                    <input type="text" name="name" id="name" class="form-control" value='<%=name %>'>
+                    <%- req.errors?.name ? `<span class="text-danger">${req.errors?.name}</span>` : '' %>
+               </div>
+          </div>
+
+          <div class="row  mt-3">
+               <div class="col-3">
+                    <label for="email">Email:</label>
+               </div>
+               <div class="col-9">
+                    <input type="text" name="email" id="email" class="form-control" value='<%=email %>'>
+                    <%- req.errors?.email ? `<span class="text-danger">${req.errors?.email}</span>` : '' %>
+               </div>
+
+          </div>
+
+          <div class="row  mt-3">
+               <div class="col-3">
+                    <span>trạng thái: </span>
+               </div>
+               <div class="col-9">
+                    <select name="status" class="form-control">
+                         <option value=0 <%-status===true ? 'selected' : '' %> > kich hoat
+                         </option>
+                         <option value=1 <%- req.old?.status==='1' ? 'selected' : '' %> > chua kich hoat
+                         </option>
+                    </select>
+               </div>
+          </div>
+     </div>
+     <button class="btn btn-primary">Sửa</button>
+     <a href="/users" class="btn btn-danger">huỷ</a>
+</form>
