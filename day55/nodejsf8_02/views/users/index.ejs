@@ -66,7 +66,11 @@
                                    <a class="btn btn-warning" href=<%=`/users/edit/${id}` %> >sua</a>
                               </td>
                               <td>
-                                   <a class="btn btn-danger" href=<%=`/users/delete/${id}` %> >xoa</a>
+                                   <form action=<%=`/users/delete/${id}` %> method="post"
+                                        onsubmit="return confirm('ban chan chan muon xoa?')">
+                                        <button class="btn btn-danger">xoa</button>
+                                   </form>
+
                               </td>
                          </tr>
                          <% }) %>

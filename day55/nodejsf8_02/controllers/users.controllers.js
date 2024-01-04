@@ -6,6 +6,7 @@ module.exports = {
      index: async (req, res) => {
           let { status, keyword } = req.query;
           const msg = req.flash('msg');
+          console.log(msg);
           let statusBool;
           if (status === 'active' || status === 'inactive') {
                statusBool = status === 'active' ? true : false;
@@ -43,6 +44,8 @@ module.exports = {
      },
      edit: async (req, res, next) => {
           const { id } = req.params;
+          req.session.currentId = id;
+          const msg = req.flash('msg');
           if (req.errors?.name || req.errors?.email) {
                const { name, email, status } = req.old;
                res.render('users/edit', { name, email, status, req });
@@ -52,12 +55,15 @@ module.exports = {
                     return next(createError(404));
                }
                const { name, email, status } = user[0];
-               res.render('users/edit', { name, email, status, req });
+               res.render('users/edit', { name, email, status, req, msg });
           }
 
      },
-     handleEdit: async (req, res) => {
+     handleEdit: async (req, res, next) => {
           const { id } = req.params;
+          if (+id !== +req.session.currentId) {
+               return next(createError(404));
+          }
           const schema = object({
                name: string().required('Tên bắt buộc phải nhập'),
                email: string().required('Email bắt buộc phải nhập').email('email không đúng định dạng')
@@ -70,7 +76,7 @@ module.exports = {
                body.status = body.status === '0' ? true : false;
                await userModel.updatedUser(id, body);
                req.flash('msg', 'sửa thành công');
-               return res.redirect('/users');
+               return res.redirect(`/users/edit/${id}`);
 
           } catch (e) {
                const errors = Object.fromEntries(e?.inner.map((item) => [item.path, item.message]));
@@ -80,24 +86,21 @@ module.exports = {
                return res.redirect(`/users/edit/${id}`);
           }
      },
-     delete: async (req, res) => {
+     handleDelete: async (req, res) => {
           const { id } = req.params;
+          console.log(id);
           const user = await userModel.inforUser(id);
           if (!user.length) {
                return next(createError(404));
           }
-          res.render('users/delete');
-     },
-     handleDelete: async (req, res) => {
-          const { id } = req.params;
           try {
                await userModel.deleteUser(id);
                req.flash('msg', 'xoá thành công');
-               return res.redirect('/users');
           } catch (e) {
-
+               console.log(e);
 
           }
+          return res.redirect('/users');
 
      }
 }
