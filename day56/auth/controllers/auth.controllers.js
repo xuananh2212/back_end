@@ -47,15 +47,15 @@ module.exports = {
                     }, process.env.JWT_ACCESS_KEY, {
                          expiresIn: '1h'
                     })
-                    const reffreshToken = jwt.sign({
+                    const refreshToken = jwt.sign({
                          id: user[0].id,
                          isAdmin: user[0].isAdmin,
                          email: user[0].email
-                    }, process.env.JWT_ACCESS_KEY, {
+                    }, process.env.JWT_REFRESH_KEY, {
                          expiresIn: '1h'
                     })
                     res.setHeader("Set-Cookie", [`access_token=${accessToken};path=/;HttpOnly;`,
-                    `reffresh_token = ${reffreshToken}; path =/;HttpOnly`]);
+                    `refresh_token = ${refreshToken}; path =/;HttpOnly`]);
                }
 
                return res.redirect('/');
@@ -117,7 +117,7 @@ module.exports = {
 
      },
      logOut: (req, res) => {
-          res.clearCookie('reffesh_token');
+          res.clearCookie('refresh_token');
           res.clearCookie('access_token');
           return res.redirect('/dang-nhap');
      }
