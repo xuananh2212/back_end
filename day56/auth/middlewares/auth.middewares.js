@@ -17,18 +17,20 @@ const authMiddleWare = {
           next();
 
      },
-     loginAndRegister: (req, res, next) => {
+     loginAndRegister: async (req, res, next) => {
           const token = req.cookies.access_token;
           console.log(token);
-          console.log(process.env.JWT_ACCESS_KEY, 111111);
           if (token) {
                jwt.verify(token, process.env.JWT_ACCESS_KEY, (err) => {
                     if (!err) {
                          return res.redirect('/');
+                    } else {
+                         next();
                     }
                })
+          } else {
+               next();
           }
-          next();
 
      }
 
