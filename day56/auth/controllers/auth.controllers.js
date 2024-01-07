@@ -69,7 +69,6 @@ module.exports = {
 
      },
      register: async (req, res) => {
-          console.log(1111);
           res.render('auth/register.ejs', { req });
      },
      handleRegister: async (req, res) => {

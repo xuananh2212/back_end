@@ -50,12 +50,6 @@ const authMiddleWare = {
                authMiddleWare.handlReffeshToken(refresh_token, req, res, next);
 
           }
-
-
-
-
-
-
      },
      loginAndRegister: async (req, res, next) => {
           const token = req.cookies.access_token;
