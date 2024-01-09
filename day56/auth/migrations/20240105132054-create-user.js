@@ -1,4 +1,8 @@
 'use strict';
+
+const { INTEGER } = require('sequelize');
+const { sequelize } = require('../models');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -20,6 +24,10 @@ module.exports = {
       },
       isAdmin: {
         type: Sequelize.BOOLEAN
+      },
+      status: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       createdAt: {
         allowNull: false,

@@ -22,14 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
+    status: DataTypes.INTEGER,
     isAdmin: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',
-    timestamps: false,
-    tableName: 'users',
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
   });
   return User;
 };

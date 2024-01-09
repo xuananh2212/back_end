@@ -11,8 +11,6 @@ module.exports = {
           res.render('auth/index.ejs', { msg, req, msgError });
      },
      handleLogin: async (req, res) => {
-          const { email, password } = req.body;
-          console.log(password);
           try {
                let schema = object({
                     password:
@@ -25,42 +23,46 @@ module.exports = {
                               .email("email không đúng định dang")
                });
                const body = await schema.validate(req.body, { abortEarly: false });
-               const user = await User.findAll({
+               const user = await User.findOne({
                     where: {
                          email: body.email
                     }
                })
-               if (!user.length) {
+               if (!user) {
                     req.flash('msgError', 'Thông tin tài khẩu và mật khẩu không chính xác!');
                     return res.redirect('/dang-nhap')
                }
-               const validPassword = await bcrypt.compare(body.password, user[0].password);
+               const validPassword = await bcrypt.compare(body.password, user.password);
                if (!validPassword) {
                     req.flash('msgError', 'Thông tin tài khẩu và mật khẩu không chính xác!');
                     return res.redirect('/dang-nhap')
                } else {
-                    console.log(user[0], user[0].id, user[0].email, user[0].isAdmin);
-                    const accessToken = jwt.sign({
-                         id: user[0].id,
-                         isAdmin: user[0].isAdmin,
-                         email: user[0].email
-                    }, process.env.JWT_ACCESS_KEY, {
-                         expiresIn: '1h'
-                    })
-                    const refreshToken = jwt.sign({
-                         id: user[0].id,
-                         isAdmin: user[0].isAdmin,
-                         email: user[0].email
-                    }, process.env.JWT_REFRESH_KEY, {
-                         expiresIn: '1h'
-                    })
-                    res.setHeader("Set-Cookie", [`access_token=${accessToken};path=/;HttpOnly;`,
-                    `refresh_token = ${refreshToken}; path =/;HttpOnly`]);
+                    if (user.status === 1) {
+                         const accessToken = jwt.sign({
+                              id: user.id,
+                              isAdmin: user.isAdmin,
+                              email: user.email
+                         }, process.env.JWT_ACCESS_KEY, {
+                              expiresIn: '1h'
+                         })
+                         const refreshToken = jwt.sign({
+                              id: user.id,
+                              isAdmin: user.isAdmin,
+                              email: user.email
+                         }, process.env.JWT_REFRESH_KEY, {
+                              expiresIn: '1h'
+                         })
+                         res.setHeader("Set-Cookie", [`access_token=${accessToken};path=/;HttpOnly;`,
+                         `refresh_token = ${refreshToken}; path =/;HttpOnly`]);
+                    } else {
+                         req.flash('msgError', 'Tài khoản chưa kích hoạt');
+                         return res.redirect('/dang-nhap')
+                    }
+
                }
 
                return res.redirect('/');
           } catch (e) {
-               console.log(e);
                const errors = Object.fromEntries(e?.inner?.map((item) => [item.path, item.message]));
                req.flash('errors', errors);
                req.flash('old', req.body);
@@ -79,13 +81,12 @@ module.exports = {
                     email: string().required("vui lòng nhập email")
                          .email("email không đúng định dang")
                          .test('unique', 'email đang tồn tại!', async (value) => {
-                              const users = await User.findAll({
+                              const user = await User.findOne({
                                    where: {
                                         email: value
                                    }
                               });
-                              console.log(users, 1111);
-                              return users.length ? false : true;
+                              return user ? false : true;
 
                          }),
                     password: string()
@@ -106,6 +107,7 @@ module.exports = {
                req.flash('msg', 'đăng kí thành công')
                return res.redirect('/dang-nhap');
           } catch (e) {
+               console.log(e);
                const errors = Object.fromEntries(e?.inner?.map((item) => [item.path, item.message]));
                req.flash('errors', errors);
                req.flash('old', req.body);
