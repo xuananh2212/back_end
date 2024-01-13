@@ -109,6 +109,7 @@ module.exports = {
                          .test("paswordNewRR", "mật khẩu mới trùng với mật khẩu cũ", (value) => {
                               return value !== req.body?.passwordOld
                          })
+
                })
                const body = await schema.validate(req.body, { abortEarly: false });
                const salt = await bcrypt.genSalt(10);
