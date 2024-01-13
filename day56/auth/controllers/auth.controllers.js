@@ -1,8 +1,11 @@
 var model = require('../models/index');
 const { object, string } = require('yup');
 const jwt = require('jsonwebtoken');
-const User = model.User;
+const UAParser = require('ua-parser-js');
 const bcrypt = require('bcrypt');
+const User = model.User;
+const Device = model.Device;
+const UserDevice = model.UserDevice;
 
 module.exports = {
      index: (req, res) => {
@@ -26,8 +29,10 @@ module.exports = {
                const user = await User.findOne({
                     where: {
                          email: body.email
-                    }
+                    },
+                    include: Device
                })
+
                if (!user) {
                     req.flash('msgError', 'Thông tin tài khẩu và mật khẩu không chính xác!');
                     return res.redirect('/dang-nhap')
@@ -54,6 +59,43 @@ module.exports = {
                          })
                          res.setHeader("Set-Cookie", [`access_token=${accessToken};path=/;HttpOnly;`,
                          `refresh_token = ${refreshToken}; path =/;HttpOnly`]);
+                         const userAgent = req.headers['user-agent'];
+
+                         const parser = new UAParser(userAgent);
+                         const browser = parser.getBrowser();
+
+                         const os = parser.getOS();
+
+
+                         const deviceFind = await Device.findOne({
+                              where: {
+                                   desc: userAgent
+                              }
+                         })
+                         if (!deviceFind) {
+                              const device = await Device.create({
+                                   browser: browser.name,
+                                   os: os.name,
+                                   desc: userAgent
+                              });
+                              await user.addDevice(device,
+                                   {
+                                        through: {
+                                             logOut: false
+                                        }
+                                   }
+                              );
+                         } else {
+                              await UserDevice.update({
+                                   logOut: false
+                              }, {
+                                   where: {
+                                        deviceId: deviceFind.id,
+                                        userId: user.id,
+                                   }
+                              })
+
+                         }
                     } else {
                          req.flash('msgError', 'Tài khoản chưa kích hoạt');
                          return res.redirect('/dang-nhap')
@@ -107,7 +149,7 @@ module.exports = {
                req.flash('msg', 'đăng kí thành công')
                return res.redirect('/dang-nhap');
           } catch (e) {
-               console.log(e);
+
                const errors = Object.fromEntries(e?.inner?.map((item) => [item.path, item.message]));
                req.flash('errors', errors);
                req.flash('old', req.body);
@@ -117,7 +159,29 @@ module.exports = {
 
 
      },
-     logOut: (req, res) => {
+     logOut: async (req, res) => {
+          const { id } = req.user;
+          const userAgent = req.headers['user-agent'];
+          try {
+               const deviceFind = await Device.findOne({
+                    where: {
+                         desc: userAgent
+                    }
+               })
+               await UserDevice.update({
+                    logOut: true
+               }, {
+                    where: {
+                         deviceId: deviceFind.id,
+                         userId: id,
+                    }
+               })
+
+          } catch (err) {
+               console.log(err);
+          }
+
+
           res.clearCookie('refresh_token');
           res.clearCookie('access_token');
           return res.redirect('/dang-nhap');
