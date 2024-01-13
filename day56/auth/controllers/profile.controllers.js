@@ -4,6 +4,7 @@ const { object, string } = require('yup');
 const bcrypt = require('bcrypt');
 const User = model.User;
 const UserDevice = model.UserDevice;
+
 module.exports = {
      infor: async (req, res) => {
           const { id } = req.user;
@@ -90,18 +91,24 @@ module.exports = {
                     passwordNew: string()
                          .required('vui lòng nhập password')
                          .matches(/.{8,}$/, "mật khẩu ít nhất 8 kí tự")
-                         .test("password", "mật khẩu mới không khớp nhau",
+                         .test("passwordNew", "mật khẩu mới không khớp nhau",
                               (value) => {
                                    return value === req.body?.passwordNewR
                               })
+                         .test("passwordNeww", "mật khẩu mới trùng với mật khẩu cũ", (value) => {
+                              return value !== req.body?.passwordOld
+                         })
                     ,
                     passwordNewR: string()
                          .required('vui lòng nhập password')
                          .matches(/.{8,}$/, "mật khẩu ít nhất 8 kí tự")
-                         .test("password", "mật khẩu mới không khớp nhau",
+                         .test("passwordNewR", "mật khẩu mới không khớp nhau",
                               (value) => {
                                    return value === req.body?.passwordNew
                               })
+                         .test("paswordNewRR", "mật khẩu mới trùng với mật khẩu cũ", (value) => {
+                              return value !== req.body?.passwordOld
+                         })
                })
                const body = await schema.validate(req.body, { abortEarly: false });
                const salt = await bcrypt.genSalt(10);
@@ -115,17 +122,15 @@ module.exports = {
                });
                await UserDevice.update({
                     logOut: true
+               }, {
+                    where: {
+                         userId: currentId
+                    }
                })
-               if (body.status === 0) {
-                    req.flash('msg', 'cập nhập thành công! bạn bị đã khoá tài khoản');
-                    res.clearCookie('refresh_token');
-                    res.clearCookie('access_token');
-                    res.redirect('/dang-nhap');
-                    return
-
-               }
-               req.flash('msg', 'Cập nhập thành công');
-
+               req.flash('msg', 'đổi mật khẩu thành công Vui lòng đăng nhập lại');
+               res.clearCookie('refresh_token');
+               res.clearCookie('access_token');
+               return res.redirect('/dang-nhap');
           } catch (err) {
                console.log(err);
                const errors = Object.fromEntries(err?.inner.map(({ path, message }) => [path, message]));

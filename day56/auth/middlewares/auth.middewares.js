@@ -58,6 +58,8 @@ const authMiddleWare = {
                                    }
                               })
                               if (userDevice?.logOut) {
+                                   res.clearCookie('refresh_token');
+                                   res.clearCookie('access_token');
                                    return res.redirect('/dang-nhap');
                               } else {
                                    next();
@@ -76,9 +78,8 @@ const authMiddleWare = {
      loginAndRegister: async (req, res, next) => {
           const token = req.cookies.access_token;
           if (token) {
-               jwt.verify(token, process.env.JWT_ACCESS_KEY, (err) => {
+               jwt.verify(token, process.env.JWT_ACCESS_KEY, (err, user) => {
                     if (!err) {
-                         console.log(11111);
                          return res.redirect('/');
                     } else {
                          next();
