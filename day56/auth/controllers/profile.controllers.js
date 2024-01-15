@@ -2,8 +2,11 @@ const model = require("../models/index");
 const { Op } = require("sequelize");
 const { object, string } = require('yup');
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 const User = model.User;
 const UserDevice = model.UserDevice;
+const Device = model.Device;
+
 
 module.exports = {
      infor: async (req, res) => {
@@ -138,5 +141,48 @@ module.exports = {
                req.flash('errors', errors);
           }
           return res.redirect('/profile/change-password');
+     },
+     devices: async (req, res) => {
+          const { id: currentId } = req.user;
+          const user = await User.findOne({
+               where: {
+                    id: currentId
+               },
+               include: Device
+          }
+          );
+          const devices = user?.Devices;
+          // console.log(devices, devices[0].UserDevice[0]);
+          // res.json(devices);
+          const msg = req.flash('msg');
+          const error = req.flash('error');
+          console.log(msg, error);
+          res.render('profile/devices', { devices, moment, msg, error });
+     },
+     handleDeviceLogOut: async (req, res) => {
+          const { id } = req.params;
+          if (id) {
+               try {
+                    const userDevice = await UserDevice.update({
+                         logOut: true,
+                    }, {
+                         where: {
+                              id
+                         }
+                    });
+                    if (userDevice) {
+                         req.flash('msg', "đăng xuất thành công")
+                    } else {
+                         req.flash('error', "đăng xuất thất bại")
+                    }
+               } catch (e) {
+                    console.log(e);
+               }
+
+          } else {
+               req.flash('error', "lỗi id không tồn tại!")
+          }
+          return res.redirect('/profile/devices');
+
      }
 }
