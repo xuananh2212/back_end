@@ -1,0 +1,40 @@
+<h1>Lịch sử gửi mail</h1>
+<table class="table table-bordered mt-3">
+     <thead>
+          <tr>
+               <th>STT</th>
+               <th>Email gửi đến</th>
+               <th>Tiêu đề</th>
+               <th>Trạng thái</th>
+               <th>thời gian gửi</th>
+               <th>Xem chi tiết</th>
+          </tr>
+     </thead>
+     <tbody>
+          <% sendEmails.forEach(({id, email, title, createdAt, status}, index)=> { %>
+               <tr>
+                    <td>
+                         <%= index + 1 %>
+                    </td>
+                    <td>
+                         <%= email %>
+                    </td>
+                    <td>
+                         <%= title %>
+                    </td>
+                    <td>
+                         <%= status ? "đã đọc" : "chưa đọc" %>
+                    </td>
+                    <td>
+                         <%= moment(createdAt).format('DD/MM/YYYY hh:mm:ss') %>
+                    </td>
+                    <td>
+                         <a class="btn btn-warning" href=<%=`/email/history/${id}` %> >xem chi tiết</a>
+                    </td>
+               </tr>
+               <% }) %>
+
+     </tbody>
+</table>
+
+<a class="btn btn-primary" href="/email">Quay Lại</a>

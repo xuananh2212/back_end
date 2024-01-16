@@ -1,0 +1,34 @@
+<h1>Chi tiết Email gửi đi</h1>
+<table class="table table-bordered mt-3">
+     <thead>
+          <tr>
+               <th>Email gửi đến</th>
+               <th>Tiêu đề</th>
+               <th>Nội Dung</th>
+               <th>Trạng thái</th>
+               <th>thời gian gửi</th>
+          </tr>
+     </thead>
+     <tbody>
+          <tr>
+               <td>
+                    <%= sendEmail?.email %>
+               </td>
+               <td>
+                    <%= sendEmail?.title %>
+               </td>
+               <td>
+                    <%= sendEmail?.desc %>
+               </td>
+               <td>
+                    <%= sendEmail?.status ? "đã đọc" : "chưa đọc" %>
+               </td>
+               <td>
+                    <%= moment(sendEmail?.createdAt).format('DD/MM/YYYY hh:mm:ss') %>
+               </td>
+          </tr>
+
+
+     </tbody>
+</table>
+<a class="btn btn-primary" href="/email/history">Quay lại</a>

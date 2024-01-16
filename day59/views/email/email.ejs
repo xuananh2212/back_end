@@ -1,0 +1,40 @@
+<div class="container contact-form p-4">
+     <a href="/email/history" class="btn btn-primary mb-4">Xem lịch sử</a>
+     <div class="contact-image">
+          <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact" />
+     </div>
+     <form method="post" action="/email">
+          <h3>Send Mail</h3>
+          <% if (msg.length) { %>
+               <p class="text-success">
+                    <%= msg %>
+               </p>
+               <% } %>
+                    <div class="row">
+                         <div class="col-md-6">
+                              <div class="form-group">
+                                   <input type="text" name="email" class="form-control" placeholder="Email Gửi đi "
+                                        value="" />
+                                   <% if (error.length) { %>
+                                        <p class="text-danger">
+                                             <%= error %>
+                                        </p>
+                                        <% } %>
+                              </div>
+                              <div class="form-group">
+                                   <input type="text" name="title" class="form-control" placeholder="Tiêu Đề "
+                                        value="" />
+                              </div>
+                              <div class="form-group">
+                                   <button class="btn btn-primary">Send Message </button>
+                              </div>
+                         </div>
+                         <div class="col-md-6">
+                              <div class="form-group">
+                                   <textarea name="desc" class="form-control" placeholder="Nội dung "
+                                        style="width: 100%; height: 150px;"></textarea>
+                              </div>
+                         </div>
+                    </div>
+     </form>
+</div>
