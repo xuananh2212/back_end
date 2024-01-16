@@ -1,5 +1,6 @@
 const { object, string } = require('yup');
 const moment = require('moment');
+const path = require('path');
 const sendMail = require('../utils/email');
 const SendEmail = require('../models/index').SendEmail;
 module.exports = {
@@ -23,6 +24,8 @@ module.exports = {
                req.flash('msg', 'Gửi Mail thành công');
           } catch (err) {
                console.log(err);
+               req.flash('msg', 'lỗi');
+               //   res.json(err);
                req.flash('error', err?.inner[0]?.message);
           }
 
@@ -49,19 +52,21 @@ module.exports = {
                next(new Error('id không tồn tại'));
           }
      },
-     handleReadEmail: async (req, res) => {
-          const { id } = req.params.id;
+     handleReadEmail: async (req, res, next) => {
+          const { id } = req.query;
           try {
-               await SendEmail.udpate({
-                    status: false
+               const email = await SendEmail.update({
+                    status: true
                }, {
                     where: {
                          id
                     }
                })
+               console.log(email);
           } catch (err) {
                console.log(err);
-
           }
+          return res.sendFile(path.join(__dirname, "../public", "tracking.png"))
      }
+
 }
