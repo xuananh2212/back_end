@@ -66,7 +66,7 @@ module.exports = {
           } catch (err) {
                console.log(err);
           }
-          return res.sendFile(path.join(__dirname, "../public", "tracking.png"))
+          return res.redirect('/email')
      }
 
 }
