@@ -18,10 +18,11 @@ module.exports = {
                     abortEarly: false
                })
                const { email, title, desc } = body;
-               await sendMail(email, title, desc);
-               await SendEmail.create(body);
+               const sendEmail = await SendEmail.create(body);
+               await sendMail(email, title, desc, sendEmail.id);
                req.flash('msg', 'Gửi Mail thành công');
           } catch (err) {
+               console.log(err);
                req.flash('error', err?.inner[0]?.message);
           }
 
@@ -46,6 +47,21 @@ module.exports = {
 
           } catch (err) {
                next(new Error('id không tồn tại'));
+          }
+     },
+     handleReadEmail: async (req, res) => {
+          const { id } = req.params.id;
+          try {
+               await SendEmail.udpate({
+                    status: false
+               }, {
+                    where: {
+                         id
+                    }
+               })
+          } catch (err) {
+               console.log(err);
+
           }
      }
 }

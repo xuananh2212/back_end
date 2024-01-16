@@ -6,4 +6,5 @@ router.get('/', function (req, res, next) {
   res.redirect('/email')
 });
 
+
 module.exports = router;

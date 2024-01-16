@@ -10,13 +10,13 @@ const transporter = nodemailer.createTransport({
           pass: process.env.MAIL_PASSWORD,
      },
 });
-const sendMail = async (to, subject, message) => {
+const sendMail = async (to, subject, message, id) => {
      const info = await transporter.sendMail({
           from: `<${process.env.MAIL_USER}>`, // sender address
           to, // list of receivers
           subject, // Subject line
           subject, // plain text body
-          html: message, // html body
+          html: `${message} <img src="http://localhost:3000/email/tracking-pixel.png/${id}" width="1" height="1" alt="tracking pixel">`, // html body
      });
      return info;
 }
