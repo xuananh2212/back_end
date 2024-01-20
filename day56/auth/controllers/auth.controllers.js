@@ -248,7 +248,7 @@ module.exports = {
           res.render('auth/newPassword', { req });
      },
      handleNewPassword: async (req, res) => {
-          const { email } = req.params;
+          let { email } = req.params;
           const { token } = req.query;
           email = email?.replaceAll('.', '-');
           bcrypt.compare(email, token, async (err, result) => {
