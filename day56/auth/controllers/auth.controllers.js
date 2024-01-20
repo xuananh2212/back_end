@@ -194,7 +194,6 @@ module.exports = {
                })
 
           } catch (err) {
-               console.log(err);
           }
 
 
@@ -231,17 +230,17 @@ module.exports = {
                const body = await schema.validate(req.body, { abortEarly: false });
                const salt = await bcrypt.genSalt(10);
                const hashed = await bcrypt.hash(body?.email, salt);
-               const html = `<a href="http://localhost:3000/auth/reset-password/${body?.email}?token=${hashed}">verify password</a>`
+               const html = `<a href="https://back-end-six-weld.vercel.app/auth/reset-password/${body?.email}?token=${hashed}">verify password</a>`
                await sendMail(body?.email, "verify password", html);
                req.flash('msg', "vui lòng Kiểm tra email để đổi password");
-
           } catch (err) {
+               //   console.log(err);
                if (err?.inner?.length) {
                     const error = err?.inner[0]?.message;
                     req.flash('error', error);
                }
           }
-          return res.redirect('/reset-password');
+          return res.redirect('/auth/reset-password');
 
      },
      newPassword: (req, res) => {
@@ -250,11 +249,11 @@ module.exports = {
      handleNewPassword: async (req, res) => {
           const { email } = req.params;
           const { token } = req.query;
-          console.log(email, token);
+          //    console.log(email, token);
           bcrypt.compare(email, token, async (err, result) => {
                if (!result) {
                     req.flash("msgError", "lỗi không thể đổi mật khẩu");
-                    return res.redirect('/reset-password');
+                    return res.redirect('/auth/rest-password');
                } else {
                     try {
                          const schema = object({
@@ -293,7 +292,7 @@ module.exports = {
                     } catch (err) {
                          const errors = Object.fromEntries(err?.inner.map(({ path, message }) => [path, message]));
                          req.flash('errors', errors);
-                         return res.redirect(`/reset-password/${email}?token=${token}`);
+                         return res.redirect(`/auth/rest-password/${email}?token=${token}`);
                     }
 
                }

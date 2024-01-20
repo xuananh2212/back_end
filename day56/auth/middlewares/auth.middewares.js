@@ -9,7 +9,6 @@ const authMiddleWare = {
           } else {
                jwt.verify(refresh_token, process.env.JWT_REFRESH_KEY, (err, user) => {
                     if (err) {
-                         console.log('loi');
                          return res.redirect('/auth/dang-nhap');
                     } else {
                          const accessToken = jwt.sign({
@@ -65,7 +64,6 @@ const authMiddleWare = {
                               }
 
                          } catch (err) {
-                              console.log(err);
                          }
                     }
                })

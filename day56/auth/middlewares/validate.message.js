@@ -1,6 +1,5 @@
 module.exports = (req, res, next) => {
      const getError = (errors) => {
-          console.log(errors, 'getError');
           if (errors?.length) {
                errors = errors[0]
                return errors;

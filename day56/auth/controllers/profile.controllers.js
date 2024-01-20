@@ -16,14 +16,14 @@ module.exports = {
           try {
                user = await User.findByPk(id);
           } catch (err) {
-               console.log(err);
+               //  console.log(err);
           }
           return res.render('profile/infor.ejs', { user, req, msg })
 
      },
      handleInfor: async (req, res) => {
           const { id: currentId } = req.user;
-          console.log(req.body);
+          //  console.log(req.body);
           try {
                const schema = object({
                     name: string()
@@ -66,7 +66,7 @@ module.exports = {
                req.flash('msg', 'Cập nhập thành công');
 
           } catch (err) {
-               console.log(err);
+               //  console.log(err);
                const errors = Object.fromEntries(err?.inner.map(({ path, message }) => [path, message]));
                req.flash('errors', errors);
           }
@@ -81,7 +81,7 @@ module.exports = {
      handleChangePassword: async (req, res) => {
           const { id: currentId } = req.user;
           const user = await User.findByPk(currentId);
-          console.log(user);
+          //  console.log(user);
           try {
                const schema = object({
                     passwordOld: string()
@@ -136,7 +136,7 @@ module.exports = {
                res.clearCookie('access_token');
                return res.redirect('/dang-nhap');
           } catch (err) {
-               console.log(err);
+               //  console.log(err);
                const errors = Object.fromEntries(err?.inner.map(({ path, message }) => [path, message]));
                req.flash('errors', errors);
           }
@@ -156,7 +156,7 @@ module.exports = {
           // res.json(devices);
           const msg = req.flash('msg');
           const error = req.flash('error');
-          console.log(msg, error);
+          //   console.log(msg, error);
           res.render('profile/devices', { devices, moment, msg, error });
      },
      handleDeviceLogOut: async (req, res) => {
@@ -176,7 +176,7 @@ module.exports = {
                          req.flash('error', "đăng xuất thất bại")
                     }
                } catch (e) {
-                    console.log(e);
+                    //   console.log(e);
                }
 
           } else {

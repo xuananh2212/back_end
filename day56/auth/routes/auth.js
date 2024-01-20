@@ -1,7 +1,7 @@
 var express = require('express');
+var router = express.Router();
 const jwt = require('jsonwebtoken');
 const UAParser = require('ua-parser-js');
-var router = express.Router();
 var authController = require('../controllers/auth.controllers');
 var authMiddleWare = require('../middlewares/auth.middewares');
 var { UserDevice, Device } = require('../models/index');
@@ -9,13 +9,15 @@ var { UserDevice, Device } = require('../models/index');
 var passport = require('passport');
 router.get('/dang-nhap', authMiddleWare.loginAndRegister, authController.index);
 router.post('/dang-nhap', authController.handleLogin);
+
 router.get('/dang-ki', authMiddleWare.loginAndRegister, authController.register);
 router.post('/dang-ki', authController.handleRegister);
+
 router.post('/dang-xuat', authMiddleWare.handleLogOut, authController.logOut);
 
-router.get('/reset-password', authMiddleWare.loginAndRegister,
-     authController.forgotPassword);
+router.get('/reset-password', authMiddleWare.loginAndRegister, authController.forgotPassword);
 router.post('/reset-password', authController.handleForgotPassword);
+
 router.get('/reset-password/:email', authController.newPassword);
 router.post('/reset-password/:email', authController.handleNewPassword);
 
