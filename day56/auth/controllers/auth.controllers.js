@@ -250,7 +250,7 @@ module.exports = {
      handleNewPassword: async (req, res) => {
           let { email } = req.params;
           const { token } = req.query;
-          email = email?.replaceAll('.', '-');
+          email = email?.replaceAll('-', '.');
           bcrypt.compare(email, token, async (err, result) => {
                if (!result) {
                     req.flash("msgError", "lỗi không thể đổi mật khẩu");
