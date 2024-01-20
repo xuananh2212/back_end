@@ -1,60 +1,71 @@
+<div class="p-3 border border-primary rounded" style="max-width: 600px; margin: 30px auto;">
+     <form method="post">
+          <% if (msg.length) { %>
+               <div class="alert alert-success">
+                    <%= msg %>
+               </div>
 
-          <div class="p-3 border border-primary rounded" style="max-width: 600px; margin: 30px auto;">
-               <form method="post">
-                    <% if (msg.length) { %>
-                         <div class="alert alert-success">
-                              <%= msg %>
+               <% } %>
+                    <% if (msgError.length) { %>
+                         <div class="alert alert-danger">
+                              <%= msgError %>
                          </div>
-                    
+
                          <% } %>
-                         <% if (msgError.length) { %>
-                              <div class="alert alert-danger">
-                                   <%= msgError %>
+                              <!-- Email input -->
+                              <div class="form-outline mb-4 d-flex gap-3 align-items-center">
+                                   <label class="form-label" for="form2Example1" style="min-width: 90px;">Email:</label>
+                                   <div style="flex: 1">
+                                        <input type="email" id="form2Example1" class="form-control" name="email" />
+                                        <%- req.errors?.email ? `<span class="text-danger">${req.errors?.email}</span>`
+                                             : '' %>
+                                   </div>
                               </div>
-                         
-                              <% } %>
-                    <!-- Email input -->
-                    <div class="form-outline mb-4 d-flex gap-3 align-items-center">
-                         <label class="form-label" for="form2Example1" style="min-width: 90px;">Email:</label>
-                         <div style="flex: 1">
-                              <input type="email" id="form2Example1" class="form-control" name="email" />
-                              <%- req.errors?.email ? `<span class="text-danger">${req.errors?.email}</span>` : '' %>
-                         </div>
-                    </div>
 
-                    <!-- Password input -->
-                    <div class="form-outline mb-4 d-flex gap-3 align-items-center ">
-                         <label class="form-label" for="form2Example2" style="min-width: 90px">Password:</label>
-                         <div style="flex: 1">
-                              <input name="password" type="password" id="form2Example2" class="form-control" />
-                              <%- req.errors?.password ? `<span class="text-danger">${req.errors?.password}</span>` : '' %>
-                         </div>
-                    </div>
-
-                    <!-- 2 column grid layout for inline styling -->
-                    <div class="row mb-4">
-                         <div class="col d-flex justify-content-center">
-                              <!-- Checkbox -->
-                              <div class="form-check">
-                                   <input class="form-check-input" type="checkbox" value="" id="form2Example31"
-                                        checked />
-                                   <label class="form-check-label" for="form2Example31"> Remember me </label>
+                              <!-- Password input -->
+                              <div class="form-outline mb-4 d-flex gap-3 align-items-center ">
+                                   <label class="form-label" for="form2Example2"
+                                        style="min-width: 90px">Password:</label>
+                                   <div style="flex: 1">
+                                        <input name="password" type="password" id="form2Example2"
+                                             class="form-control" />
+                                        <%- req.errors?.password ? `<span
+                                             class="text-danger">${req.errors?.password}</span>` : '' %>
+                                   </div>
                               </div>
-                         </div>
 
-                         <div class="col">
-                              <!-- Simple link -->
-                              <a href="#!">Forgot password?</a>
-                         </div>
-                    </div>
+                              <!-- 2 column grid layout for inline styling -->
+                              <div class="row mb-4">
+                                   <div class="col d-flex justify-content-center">
+                                        <!-- Checkbox -->
+                                        <div class="form-check">
+                                             <input class="form-check-input" type="checkbox" value=""
+                                                  id="form2Example31" checked />
+                                             <label class="form-check-label" for="form2Example31"> Remember me </label>
+                                        </div>
+                                   </div>
 
-                    <!-- Submit button -->
-                    <button class="d-block btn btn-primary mx-auto">Sign in</button>
+                                   <div class="col">
+                                        <!-- Simple link -->
+                                        <a href="/auth/reset-password">Forgot password?</a>
+                                   </div>
+                              </div>
 
-                    <!-- Register buttons -->
-                    <div class="text-center mt-4">
-                         <p>Not a member? <a href="/dang-ki">Register</a></p>
+                              <!-- Submit button -->
+                              <button class="d-block btn btn-primary mx-auto">Sign in</button>
+                              <div class="d-flex justify-content-center align-items-center flex-column">
+                                   <div class="divider d-flex align-items-center my-4">
+                                        <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                                   </div>
+                                   <a class="btn btn-primary btn-lg btn-block" style="background-color: #55acee"
+                                        href="/auth/google/redirect" role="button">
+                                        <i class="fab fa-google fa-lg"></i>Continue with Google</a>
+                              </div>
 
-                    </div>
-               </form>
-          </div>
+                              <!-- Register buttons -->
+                              <div class="text-center mt-4">
+                                   <p>Not a member? <a href="/auth/dang-ki">Register</a></p>
+
+                              </div>
+     </form>
+</div>

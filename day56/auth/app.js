@@ -7,11 +7,15 @@ var logger = require('morgan');
 var session = require('express-session');
 var flash = require('connect-flash');
 var expressLayouts = require('express-ejs-layouts');
+var passport = require('passport');
+var User = require('./models/index').User;
+
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var profileRouter = require('./routes/profile');
 var validate = require('./middlewares/validate.message');
 var authMiddleWare = require('./middlewares/auth.middewares');
+var googlePassport = require('./passports/google.passport');
 var app = express();
 
 
@@ -26,6 +30,8 @@ app.use(session({
   saveUninitialized: true,
 }))
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(validate);
 
 
@@ -37,7 +43,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use(authRouter);
+passport.use(googlePassport);
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+
+
+app.use("/auth", authRouter);
 app.use(authMiddleWare.index);
 app.use(indexRouter);
 app.use("/profile", profileRouter);

@@ -5,12 +5,12 @@ const Device = model.Device;
 const authMiddleWare = {
      handlReffeshToken: (refresh_token, req, res, next) => {
           if (!refresh_token) {
-               return res.redirect('/dang-nhap');
+               return res.redirect('/auth/dang-nhap');
           } else {
                jwt.verify(refresh_token, process.env.JWT_REFRESH_KEY, (err, user) => {
                     if (err) {
                          console.log('loi');
-                         return res.redirect('/dang-nhap');
+                         return res.redirect('/auth/dang-nhap');
                     } else {
                          const accessToken = jwt.sign({
                               id: user.id,
@@ -59,7 +59,7 @@ const authMiddleWare = {
                               if (userDevice?.logOut) {
                                    res.clearCookie('refresh_token');
                                    res.clearCookie('access_token');
-                                   return res.redirect('/dang-nhap');
+                                   return res.redirect('/auth/dang-nhap');
                               } else {
                                    next();
                               }
@@ -97,11 +97,11 @@ const authMiddleWare = {
                          req.user = user;
                          next();
                     } else {
-                         return res.redirect('/dang-nhap')
+                         return res.redirect('/auth/dang-nhap')
                     }
                })
           } else {
-               return res.redirect('/dang-nhap')
+               return res.redirect('/auth/dang-nhap')
           }
 
      }

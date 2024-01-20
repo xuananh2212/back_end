@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         through: models.UserDevice,
         foreignKey: "userId"
       })
+      User.belongsTo(models.Provider, {
+        foreignKey: "providerId"
+      })
     }
   }
   User.init({
@@ -28,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     status: DataTypes.INTEGER,
-    isAdmin: DataTypes.BOOLEAN
+    isAdmin: DataTypes.BOOLEAN,
+    providerId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'User',

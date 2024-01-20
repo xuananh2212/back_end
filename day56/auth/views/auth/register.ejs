@@ -13,59 +13,74 @@
 
                                              <div class="d-flex flex-row align-items-center mb-4">
                                                   <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                                                  <div class="form-outline d-flex gap-30 align-items-center flex-fill mb-0">
-                                                       <label class="form-label" style="min-width: 90px" for="form3Example1c">Name</label>
-                                                      <div>
+                                                  <div
+                                                       class="form-outline d-flex gap-30 align-items-center flex-fill mb-0">
+                                                       <label class="form-label" style="min-width: 90px"
+                                                            for="form3Example1c">Name</label>
+                                                       <div>
                                                             <input type="text" id="form3Example1c" class="form-control"
                                                                  name="name" />
-                                                           
-                                                                 <%- req.errors?.name ? `<span class="text-danger">${req.errors?.name}</span>` : '' %>
-                                                      </div>
+
+                                                            <%- req.errors?.name ? `<span
+                                                                 class="text-danger">${req.errors?.name}</span>` : '' %>
+                                                       </div>
                                                   </div>
                                              </div>
 
                                              <div class="d-flex flex-row align-items-center mb-4">
                                                   <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                                                  <div class="form-outline d-flex gap-30 align-items-center flex-fill mb-0">
-                                                       <label class="form-label" style="min-width: 90px" for="form3Example3c">Email:</label>
+                                                  <div
+                                                       class="form-outline d-flex gap-30 align-items-center flex-fill mb-0">
+                                                       <label class="form-label" style="min-width: 90px"
+                                                            for="form3Example3c">Email:</label>
                                                        <div>
                                                             <input type="email" id="form3Example3c" class="form-control"
                                                                  name="email" />
-                                                                 <%- req.errors?.email ? `<span class="text-danger">${req.errors?.email}</span>` : '' %>
+                                                            <%- req.errors?.email ? `<span
+                                                                 class="text-danger">${req.errors?.email}</span>` : ''
+                                                                 %>
                                                        </div>
                                                   </div>
                                              </div>
 
                                              <div class="d-flex flex-row align-items-center mb-4">
                                                   <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                                                  <div class="form-outline d-flex gap-30 align-items-center flex-fill mb-0">
-                                                       <label class="form-label" style="min-width: 90px" for="form3Example4c">Password:</label>
+                                                  <div
+                                                       class="form-outline d-flex gap-30 align-items-center flex-fill mb-0">
+                                                       <label class="form-label" style="min-width: 90px"
+                                                            for="form3Example4c">Password:</label>
                                                        <div>
-                                                            <input type="password" id="form3Example4c" class="form-control"
-                                                                 name="password" />
-                                                                 <%- req.errors?.password ? `<span class="text-danger">${req.errors?.password}</span>` : '' %>
+                                                            <input type="password" id="form3Example4c"
+                                                                 class="form-control" name="password" />
+                                                            <%- req.errors?.password ? `<span
+                                                                 class="text-danger">${req.errors?.password}</span>` :
+                                                                 '' %>
                                                        </div>
                                                   </div>
                                              </div>
 
                                              <div class="d-flex flex-row align-items-center mb-4">
                                                   <i class="fas fa-key fa-lg me-3 fa-fw"></i>
-                                                  <div class="form-outline d-flex gap-30 align-items-center flex-fill mb-0">
-                                                       <label class="form-label" style="min-width: 90px" for="form3Example4cd">R-
+                                                  <div
+                                                       class="form-outline d-flex gap-30 align-items-center flex-fill mb-0">
+                                                       <label class="form-label" style="min-width: 90px"
+                                                            for="form3Example4cd">R-
                                                             password:</label>
                                                        <div>
-                                                            <input type="password" id="form3Example4cd" class="form-control"
-                                                                 name="passwordRe" />
-                                                           
-                                                                 <%- req.errors?.password ? `<span class="text-danger">${req.errors?.password}</span>` : '' %>
+                                                            <input type="password" id="form3Example4cd"
+                                                                 class="form-control" name="passwordRe" />
+
+                                                            <%- req.errors?.password ? `<span
+                                                                 class="text-danger">${req.errors?.password}</span>` :
+                                                                 '' %>
                                                        </div>
-                                                           
+
                                                   </div>
                                              </div>
 
                                              <div class="form-check d-flex justify-content-center mb-5">
                                                   <p class="form-check-label" for="form2Example3">
-                                                      Quay Lại? <a href="/dang-nhap">Đăng Nhập</a>
+                                                       Quay Lại? <a href="/auth/dang-nhap">Đăng Nhập</a>
                                                   </p>
                                              </div>
 

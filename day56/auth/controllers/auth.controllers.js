@@ -6,7 +6,8 @@ const bcrypt = require('bcrypt');
 const User = model.User;
 const Device = model.Device;
 const UserDevice = model.UserDevice;
-
+const { Op } = require("sequelize");
+const sendMail = require('../utils/mailer');
 module.exports = {
      index: (req, res) => {
           const msg = req.flash('msg');
@@ -35,12 +36,12 @@ module.exports = {
 
                if (!user) {
                     req.flash('msgError', 'Thông tin tài khẩu và mật khẩu không chính xác!');
-                    return res.redirect('/dang-nhap')
+                    return res.redirect('/auth/dang-nhap')
                }
                const validPassword = await bcrypt.compare(body.password, user.password);
                if (!validPassword) {
                     req.flash('msgError', 'Thông tin tài khẩu và mật khẩu không chính xác!');
-                    return res.redirect('/dang-nhap')
+                    return res.redirect('/auth/dang-nhap')
                } else {
                     if (user.status === 1) {
                          const accessToken = jwt.sign({
@@ -60,18 +61,20 @@ module.exports = {
                          res.setHeader("Set-Cookie", [`access_token=${accessToken};path=/;HttpOnly;`,
                          `refresh_token = ${refreshToken}; path =/;HttpOnly`]);
                          const userAgent = req.headers['user-agent'];
-
                          const parser = new UAParser(userAgent);
                          const browser = parser.getBrowser();
-
                          const os = parser.getOS();
-
-
                          const deviceFind = await Device.findOne({
                               where: {
                                    desc: userAgent
                               }
                          })
+                         const userDevice = await UserDevice.findOne({
+                              where: {
+                                   userId: user.id
+                              }
+                         })
+                         console.log(userDevice);
                          if (!deviceFind) {
                               const device = await Device.create({
                                    browser: browser.name,
@@ -86,19 +89,31 @@ module.exports = {
                                    }
                               );
                          } else {
-                              await UserDevice.update({
-                                   logOut: false
-                              }, {
-                                   where: {
-                                        deviceId: deviceFind.id,
-                                        userId: user.id,
-                                   }
-                              })
+                              if (!userDevice) {
+                                   await user.addDevice(deviceFind,
+                                        {
+                                             through: {
+                                                  logOut: false
+                                             }
+                                        }
+                                   );
+                              } else {
+                                   await UserDevice.update({
+                                        logOut: false
+                                   }, {
+                                        where: {
+                                             deviceId: deviceFind.id,
+                                             userId: user.id,
+                                        }
+                                   })
+
+                              }
+
 
                          }
                     } else {
                          req.flash('msgError', 'Tài khoản chưa kích hoạt');
-                         return res.redirect('/dang-nhap')
+                         return res.redirect('/auth/dang-nhap')
                     }
 
                }
@@ -108,7 +123,7 @@ module.exports = {
                const errors = Object.fromEntries(e?.inner?.map((item) => [item.path, item.message]));
                req.flash('errors', errors);
                req.flash('old', req.body);
-               return res.redirect('/dang-nhap');
+               return res.redirect('/auth/dang-nhap');
           }
 
      },
@@ -125,7 +140,8 @@ module.exports = {
                          .test('unique', 'email đang tồn tại!', async (value) => {
                               const user = await User.findOne({
                                    where: {
-                                        email: value
+                                        email: value,
+                                        providerId: null
                                    }
                               });
                               return user ? false : true;
@@ -147,13 +163,13 @@ module.exports = {
                     password: hashed
                });
                req.flash('msg', 'đăng kí thành công')
-               return res.redirect('/dang-nhap');
+               return res.redirect('/auth/dang-nhap');
           } catch (e) {
 
                const errors = Object.fromEntries(e?.inner?.map((item) => [item.path, item.message]));
                req.flash('errors', errors);
                req.flash('old', req.body);
-               return res.redirect('/dang-ki');
+               return res.redirect('/auth/dang-ki');
           }
 
 
@@ -184,6 +200,106 @@ module.exports = {
 
           res.clearCookie('refresh_token');
           res.clearCookie('access_token');
-          return res.redirect('/dang-nhap');
+          return res.redirect('/auth/dang-nhap');
+     },
+     forgotPassword: (req, res) => {
+          const msg = req.flash('msg');
+          const error = req.flash('error');
+          const msgError = req.flash("msgError");
+          res.render('auth/forgotPassword', { req, error, msg, msgError });
+     }
+     ,
+     handleForgotPassword: async (req, res) => {
+          try {
+               let schema = object({
+                    email: string().required("vui lòng nhập email")
+                         .email("email không đúng định dang")
+                         .test('unique', 'email không tồn tại!', async (value) => {
+                              const user = await User.findOne({
+                                   where: {
+                                        email: value,
+                                        providerId: {
+                                             [Op.is]: null,
+                                        }
+                                   }
+                              });
+                              return user ? true : false;
+
+                         }),
+
+               });
+               const body = await schema.validate(req.body, { abortEarly: false });
+               const salt = await bcrypt.genSalt(10);
+               const hashed = await bcrypt.hash(body?.email, salt);
+               const html = `<a href="http://localhost:3000/auth/reset-password/${body?.email}?token=${hashed}">verify password</a>`
+               await sendMail(body?.email, "verify password", html);
+               req.flash('msg', "vui lòng Kiểm tra email để đổi password");
+
+          } catch (err) {
+               if (err?.inner?.length) {
+                    const error = err?.inner[0]?.message;
+                    req.flash('error', error);
+               }
+          }
+          return res.redirect('/reset-password');
+
+     },
+     newPassword: (req, res) => {
+          res.render('auth/newPassword', { req });
+     },
+     handleNewPassword: async (req, res) => {
+          const { email } = req.params;
+          const { token } = req.query;
+          console.log(email, token);
+          bcrypt.compare(email, token, async (err, result) => {
+               if (!result) {
+                    req.flash("msgError", "lỗi không thể đổi mật khẩu");
+                    return res.redirect('/reset-password');
+               } else {
+                    try {
+                         const schema = object({
+                              passwordNew: string()
+                                   .required('vui lòng nhập password')
+                                   .matches(/.{8,}$/, "mật khẩu ít nhất 8 kí tự")
+                                   .test("passwordNew", "mật khẩu mới không khớp nhau",
+                                        (value) => {
+                                             return value === req.body?.passwordNewR
+                                        })
+                              ,
+                              passwordNewR: string()
+                                   .required('vui lòng nhập password')
+                                   .matches(/.{8,}$/, "mật khẩu ít nhất 8 kí tự")
+                                   .test("passwordNewR", "mật khẩu mới không khớp nhau",
+                                        (value) => {
+                                             return value === req.body?.passwordNew
+                                        })
+                         })
+                         const body = await schema.validate(req.body, { abortEarly: false });
+                         const salt = await bcrypt.genSalt(10);
+                         const hashed = await bcrypt.hash(body.passwordNew, salt);
+                         await User.update({
+                              password: hashed
+                         }, {
+                              where: {
+                                   email,
+                                   providerId: {
+                                        [Op.is]: null,
+                                   }
+
+                              }
+                         });
+                         req.flash('msg', 'đổi mật khẩu thành công Vui lòng đăng nhập lại');
+                         return res.redirect('/auth/dang-nhap');
+                    } catch (err) {
+                         const errors = Object.fromEntries(err?.inner.map(({ path, message }) => [path, message]));
+                         req.flash('errors', errors);
+                         return res.redirect(`/reset-password/${email}?token=${token}`);
+                    }
+
+               }
+
+          })
+
+
      }
 }

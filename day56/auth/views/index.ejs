@@ -15,12 +15,15 @@
                               <li><a class="dropdown-item" href="/profile/basic-information">Thông tin cá nhân</a></li>
                               <li><a class="dropdown-item" href="/profile/devices">Quản lý thiết bị</a>
                               </li>
-                              <li><a class="dropdown-item" href="/profile/change-password">đổi mật khẩu</a></li>
-                              <li>
-                                   <form method="post" action="/dang-xuat">
-                                        <button class="dropdown-item">logout</button>
-                                   </form>
-                              </li>
+                              <% if (user.providerId) { %>
+                                   <li><a class="dropdown-item" href="/profile/change-password">đổi mật khẩu</a></li>
+
+                                   <% } %>
+                                        <li>
+                                             <form method="post" action="/auth/dang-xuat">
+                                                  <button class="dropdown-item">logout</button>
+                                             </form>
+                                        </li>
                          </ul>
                     </li>
                </ul>
