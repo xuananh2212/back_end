@@ -229,8 +229,9 @@ module.exports = {
                });
                const body = await schema.validate(req.body, { abortEarly: false });
                const salt = await bcrypt.genSalt(10);
+               const emailString = body?.email.replaceAll('.', '-');
                const hashed = await bcrypt.hash(body?.email, salt);
-               const html = `<a href="https://back-end-six-weld.vercel.app/auth/reset-password/${body?.email}?token=${hashed}">verify password</a>`
+               const html = `<a href="https://back-end-six-weld.vercel.app/auth/reset-password/${emailString}?token=${hashed}">verify password</a>`
                await sendMail(body?.email, "verify password", html);
                req.flash('msg', "vui lòng Kiểm tra email để đổi password");
           } catch (err) {
@@ -249,7 +250,7 @@ module.exports = {
      handleNewPassword: async (req, res) => {
           const { email } = req.params;
           const { token } = req.query;
-          //    console.log(email, token);
+          email = email?.replaceAll('.', '-');
           bcrypt.compare(email, token, async (err, result) => {
                if (!result) {
                     req.flash("msgError", "lỗi không thể đổi mật khẩu");
