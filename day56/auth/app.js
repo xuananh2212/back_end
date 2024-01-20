@@ -17,6 +17,7 @@ var validate = require('./middlewares/validate.message');
 var authMiddleWare = require('./middlewares/auth.middewares');
 var googlePassport = require('./passports/google.passport');
 var app = express();
+var cors = require('cors')
 
 
 
