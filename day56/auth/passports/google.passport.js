@@ -38,11 +38,14 @@ module.exports = new GoogleStrategy({
      scope: ['profile'],
      state: true
 }, async function (accessToken, refreshToken, profile, done) {
-     console.log(profile);
+     let email = "";
+     if (Array.isArray(profile?.emails[0])) {
+          email = profile?.emails[0];
+     }
      try {
           const user = await User.findOne({
                where: {
-                    email: profile?.emails[0].value,
+                    email
                },
                include: Provider
           });
