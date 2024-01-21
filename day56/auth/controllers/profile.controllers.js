@@ -88,7 +88,7 @@ module.exports = {
                          .required('vui lòng nhập password')
                          .matches(/.{8,}$/, "mật khẩu ít nhất 8 kí tự")
                          .test("password", "mật khẩu cũ không chính xác", async (value) => {
-                              return await bcrypt.compare(value, user?.password);
+                              return bcrypt.compareSync(value, user?.password);
                          })
                     ,
                     passwordNew: string()
