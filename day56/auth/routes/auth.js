@@ -21,11 +21,7 @@ router.post('/reset-password', authController.handleForgotPassword);
 router.get('/reset-password/:token', authController.newPassword);
 router.post('/reset-password/:token', authController.handleNewPassword);
 
-router.get('/google/redirect', passport.authenticate('google', {
-     scope:
-          ['email', 'profile']
-}
-));
+router.get('/google/redirect', passport.authenticate('google'));
 router.get('/google/callback',
      passport.authenticate('google', {
           failureRedirect: '/auth/dang-nhap',
