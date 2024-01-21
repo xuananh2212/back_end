@@ -38,6 +38,7 @@ module.exports = new GoogleStrategy({
      scope: ['profile'],
      state: true
 }, async function (accessToken, refreshToken, profile, done) {
+     console.log(profile);
      try {
           const user = await User.findOne({
                where: {
