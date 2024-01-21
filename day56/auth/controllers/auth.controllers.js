@@ -42,7 +42,7 @@ module.exports = {
                     req.flash('msgError', 'Thông tin tài khẩu và mật khẩu không chính xác!');
                     return res.redirect('/auth/dang-nhap')
                }
-               const validPassword = await bcrypt.compare(body.password, user.password);
+               const validPassword = bcrypt.compareSync(body.password, user.password);
                if (!validPassword) {
                     req.flash('msgError', 'Thông tin tài khẩu và mật khẩu không chính xác!');
                     return res.redirect('/auth/dang-nhap')

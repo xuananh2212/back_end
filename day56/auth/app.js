@@ -8,7 +8,7 @@ var session = require('express-session');
 var flash = require('connect-flash');
 var expressLayouts = require('express-ejs-layouts');
 var passport = require('passport');
-var User = require('./models/index').User;
+
 
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
