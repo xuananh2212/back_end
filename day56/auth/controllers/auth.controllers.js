@@ -234,12 +234,10 @@ module.exports = {
                });
                const body = await schema.validate(req.body, { abortEarly: false });
                const token = jwt.sign({ email: body?.email }, process.env.JWT_ACCESS_KEY, { expiresIn: '30s' });
-               //https://back-end-six-weld.vercel.app
                const html = `<a href="http://localhost:3000/auth/reset-password/${token}">verify password</a>`
                await sendMail(body?.email, "verify password", html);
                req.flash('msg', "vui lòng Kiểm tra email để đổi password");
           } catch (err) {
-               //   console.log(err);
                if (err?.inner?.length) {
                     const error = err?.inner[0]?.message;
                     req.flash('error', error);
