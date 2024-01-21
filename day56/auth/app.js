@@ -17,9 +17,6 @@ var validate = require('./middlewares/validate.message');
 var authMiddleWare = require('./middlewares/auth.middewares');
 var googlePassport = require('./passports/google.passport');
 var app = express();
-var cors = require('cors')
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,9 +39,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(cors());
 
-passport.use(googlePassport);
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -52,7 +47,7 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
   done(null, user);
 });
-
+passport.use(googlePassport);
 
 app.use("/auth", authRouter);
 app.use(authMiddleWare.index);
