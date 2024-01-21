@@ -18,8 +18,8 @@ router.post('/dang-xuat', authMiddleWare.handleLogOut, authController.logOut);
 router.get('/reset-password', authMiddleWare.loginAndRegister, authController.forgotPassword);
 router.post('/reset-password', authController.handleForgotPassword);
 
-router.get('/reset-password/:email', authController.newPassword);
-router.post('/reset-password/:email', authController.handleNewPassword);
+router.get('/reset-password/:token', authController.newPassword);
+router.post('/reset-password/:token', authController.handleNewPassword);
 
 router.get('/google/redirect', passport.authenticate('google', {
      scope:

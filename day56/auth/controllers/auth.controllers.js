@@ -29,7 +29,11 @@ module.exports = {
                const body = await schema.validate(req.body, { abortEarly: false });
                const user = await User.findOne({
                     where: {
-                         email: body.email
+                         email: body.email,
+                         providerId: {
+                              [Op.is]: null,
+                         }
+
                     },
                     include: Device
                })
@@ -120,6 +124,7 @@ module.exports = {
 
                return res.redirect('/');
           } catch (e) {
+               console.log(e);
                const errors = Object.fromEntries(e?.inner?.map((item) => [item.path, item.message]));
                req.flash('errors', errors);
                req.flash('old', req.body);
@@ -228,10 +233,9 @@ module.exports = {
 
                });
                const body = await schema.validate(req.body, { abortEarly: false });
-               const salt = await bcrypt.genSalt(10);
-               const hashed = await bcrypt.hash(body?.email, salt);
-               const emailString = body?.email.replaceAll('.', '-');
-               const html = `<a href="https://back-end-six-weld.vercel.app/auth/reset-password/${emailString}?token=${hashed}">verify password</a>`
+               const token = jwt.sign({ email: body?.email }, process.env.JWT_ACCESS_KEY, { expiresIn: '30s' });
+               //https://back-end-six-weld.vercel.app
+               const html = `<a href="http://localhost:3000/auth/reset-password/${token}">verify password</a>`
                await sendMail(body?.email, "verify password", html);
                req.flash('msg', "vui lòng Kiểm tra email để đổi password");
           } catch (err) {
@@ -244,18 +248,25 @@ module.exports = {
           return res.redirect('/auth/reset-password');
 
      },
-     newPassword: (req, res) => {
-          res.render('auth/newPassword', { req });
+     newPassword: (req, res, next) => {
+          const { token } = req.params;
+          jwt.verify(token, process.env.JWT_ACCESS_KEY, async (err, data) => {
+               if (err) {
+                    return next(new Error("url hết hạn"));
+               } else {
+                    res.render('auth/newPassword', { req });
+               }
+          });
+
      },
      handleNewPassword: async (req, res) => {
-          let { email } = req.params;
-          const { token } = req.query;
-          email = email?.replaceAll('-', '.');
-          bcrypt.compare(email, token, async (err, result) => {
-               if (!result) {
+          const { token } = req.params;
+          jwt.verify(token, process.env.JWT_ACCESS_KEY, async (err, data) => {
+               if (err) {
                     req.flash("msgError", "lỗi không thể đổi mật khẩu");
                     return res.redirect('/auth/rest-password');
                } else {
+                    const { email } = data;
                     try {
                          const schema = object({
                               passwordNew: string()
