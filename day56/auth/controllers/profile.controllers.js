@@ -81,7 +81,6 @@ module.exports = {
      handleChangePassword: async (req, res) => {
           const { id: currentId } = req.user;
           const user = await User.findByPk(currentId);
-          //  console.log(user);
           try {
                const schema = object({
                     passwordOld: string()

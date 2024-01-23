@@ -13,13 +13,11 @@ const authMiddleWare = {
                     } else {
                          const accessToken = jwt.sign({
                               id: user.id,
-                              isAdmin: user.isAdmin,
                          }, process.env.JWT_ACCESS_KEY, {
                               expiresIn: '1h'
                          })
                          const refreshToken = jwt.sign({
                               id: user.id,
-                              isAdmin: user.isAdmin,
                          }, process.env.JWT_REFRESH_KEY, {
                               expiresIn: '1h'
                          })

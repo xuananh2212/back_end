@@ -1,0 +1,43 @@
+<div class="flex-grow-1">
+     <h1>Quản lý Roles</h1>
+     <% if (success.length) { %>
+          <p class="alert alert-success">
+               <%= success %>
+          </p>
+          <% } %>
+               <a href="/roles/add" class="btn btn-primary">Add</a>
+               <hr>
+               <table class="table table-bordered mt-3">
+                    <thead>
+                         <tr>
+                              <th width="5%">STT</th>
+                              <th>Tên</th>
+                              <th width="5%">Sửa</th>
+                              <th width="5%">Xoá</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         <% roles.forEach(({id, name}, index)=> { %>
+                              <tr>
+                                   <td>
+                                        <%= index + 1 %>
+                                   </td>
+                                   <td>
+                                        <%= name %>
+                                   </td>
+                                   <td>
+                                        <a class="btn btn-warning" href=<%=`/roles/edit/${id}` %> > Sửa </a>
+                                   </td>
+                                   <td>
+                                        <form action="/roles/delete/<%= id %>" method="post"
+                                             onsubmit="return confirm('bạn có chắc chắn ?')">
+                                             <button class="btn btn-danger"> Xoá </button>
+                                        </form>
+
+                                   </td>
+                              </tr>
+                              <% }) %>
+
+                    </tbody>
+               </table>
+</div>

@@ -1,58 +1,60 @@
-<h1>Quản lý thiết bị</h1>
-<% if (msg.length) { %>
-     <p class="text-success">
-          <%= msg %>
-     </p>
-     <% } %>
-          <% if (error.length) { %>
-               <p class="text-danger">
-                    <%= error %>
-               </p>
-               <% } %>
-                    <table class="table table-bordered mt-3">
-                         <thead>
-                              <tr>
-                                   <th>STT</th>
-                                   <th>Trình duyệt</th>
-                                   <th>Hệ Điều Hành</th>
-                                   <th>chi tiết</th>
-                                   <th>Thời gian</th>
-                                   <th>Trạng thái</th>
-                                   <th>Đăng Xuất</th>
-                              </tr>
-                         </thead>
-                         <tbody>
-                              <% devices.forEach(({id, browser, os, desc, UserDevice}, index)=> { %>
+<div>
+     <h1>Quản lý thiết bị</h1>
+     <% if (msg.length) { %>
+          <p class="text-success">
+               <%= msg %>
+          </p>
+          <% } %>
+               <% if (error.length) { %>
+                    <p class="text-danger">
+                         <%= error %>
+                    </p>
+                    <% } %>
+                         <table class="table table-bordered mt-3">
+                              <thead>
                                    <tr>
-                                        <td>
-                                             <%= index + 1 %>
-                                        </td>
-                                        <td>
-                                             <%= browser %>
-                                        </td>
-                                        <td>
-                                             <%= os %>
-                                        </td>
-                                        <td>
-                                             <%=desc %>
-                                        </td>
-                                        <td>
-                                             <%= moment(UserDevice?.createAt).format('DD/MM/YYYY HH:mm:ss') %>
-                                        </td>
-                                        <td>
-                                             <%= UserDevice?.logOut ? "đã đăng xuất" : "đang hoạt động" %>
-                                        </td>
-                                        <td>
-                                             <%- UserDevice?.logOut ? "" : ` <form
-                                                  action="/profile/devices/${UserDevice?.id}" method="post">
-                                                  <button class="btn btn-danger">Đăng Xuất</button>
-                                                  </form>
-
-                                                  ` %>
-                                        </td>
-
+                                        <th>STT</th>
+                                        <th>Trình duyệt</th>
+                                        <th>Hệ Điều Hành</th>
+                                        <th>chi tiết</th>
+                                        <th>Thời gian</th>
+                                        <th>Trạng thái</th>
+                                        <th>Đăng Xuất</th>
                                    </tr>
-                                   <% }) %>
+                              </thead>
+                              <tbody>
+                                   <% devices.forEach(({id, browser, os, desc, UserDevice}, index)=> { %>
+                                        <tr>
+                                             <td>
+                                                  <%= index + 1 %>
+                                             </td>
+                                             <td>
+                                                  <%= browser %>
+                                             </td>
+                                             <td>
+                                                  <%= os %>
+                                             </td>
+                                             <td>
+                                                  <%=desc %>
+                                             </td>
+                                             <td>
+                                                  <%= moment(UserDevice?.createAt).format('DD/MM/YYYY HH:mm:ss') %>
+                                             </td>
+                                             <td>
+                                                  <%= UserDevice?.logOut ? "đã đăng xuất" : "đang hoạt động" %>
+                                             </td>
+                                             <td>
+                                                  <%- UserDevice?.logOut ? "" : ` <form
+                                                       action="/profile/devices/${UserDevice?.id}" method="post">
+                                                       <button class="btn btn-danger">Đăng Xuất</button>
+                                                       </form>
 
-                         </tbody>
-                    </table>
+                                                       ` %>
+                                             </td>
+
+                                        </tr>
+                                        <% }) %>
+
+                              </tbody>
+                         </table>
+</div>

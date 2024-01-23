@@ -13,6 +13,9 @@ var passport = require('passport');
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var profileRouter = require('./routes/profile');
+var userRouter = require('./routes/user');
+var roleRouter = require('./routes/role');
+
 var validate = require('./middlewares/validate.message');
 var authMiddleWare = require('./middlewares/auth.middewares');
 var googlePassport = require('./passports/google.passport');
@@ -52,6 +55,8 @@ passport.use(googlePassport);
 app.use("/auth", authRouter);
 app.use(authMiddleWare.index);
 app.use(indexRouter);
+app.use('/users', userRouter);
+app.use('/roles', roleRouter);
 app.use("/profile", profileRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

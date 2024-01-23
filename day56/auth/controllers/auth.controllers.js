@@ -3,16 +3,15 @@ const { object, string } = require('yup');
 const jwt = require('jsonwebtoken');
 const UAParser = require('ua-parser-js');
 const bcrypt = require('bcrypt');
-const User = model.User;
-const Device = model.Device;
-const UserDevice = model.UserDevice;
+const { User, Device, UserDevice, BlackList } = model;
+
 const { Op } = require("sequelize");
 const sendMail = require('../utils/mailer');
 module.exports = {
      index: (req, res) => {
           const msg = req.flash('msg');
           const msgError = req.flash('msgError');
-          res.render('auth/index.ejs', { msg, req, msgError });
+          res.render('auth/index.ejs', { msg, req, msgError, layout: 'auth/layout.ejs' });
      },
      handleLogin: async (req, res) => {
           try {
@@ -50,14 +49,12 @@ module.exports = {
                     if (user.status === 1) {
                          const accessToken = jwt.sign({
                               id: user.id,
-                              isAdmin: user.isAdmin,
                               email: user.email
                          }, process.env.JWT_ACCESS_KEY, {
                               expiresIn: '1h'
                          })
                          const refreshToken = jwt.sign({
                               id: user.id,
-                              isAdmin: user.isAdmin,
                               email: user.email
                          }, process.env.JWT_REFRESH_KEY, {
                               expiresIn: '1h'
@@ -78,7 +75,7 @@ module.exports = {
                                    userId: user.id
                               }
                          })
-                         console.log(userDevice);
+                         // console.log(userDevice);
                          if (!deviceFind) {
                               const device = await Device.create({
                                    browser: browser.name,
@@ -121,19 +118,17 @@ module.exports = {
                     }
 
                }
-
                return res.redirect('/');
           } catch (e) {
-               console.log(e);
+               // console.log(e);
                const errors = Object.fromEntries(e?.inner?.map((item) => [item.path, item.message]));
                req.flash('errors', errors);
                req.flash('old', req.body);
                return res.redirect('/auth/dang-nhap');
           }
-
      },
      register: async (req, res) => {
-          res.render('auth/register.ejs', { req });
+          res.render('auth/register.ejs', { req, layout: 'auth/layout.ejs' });
      },
      handleRegister: async (req, res) => {
           const { password, passwordRe } = req.body;
@@ -233,11 +228,16 @@ module.exports = {
 
                });
                const body = await schema.validate(req.body, { abortEarly: false });
-               const token = jwt.sign({ email: body?.email }, process.env.JWT_ACCESS_KEY, { expiresIn: '30s' });
+               const expirationTime = Math.floor(Date.now() / 1000) + 15 * 60;
+               let token = jwt.sign({ email: body?.email }, process.env.JWT_ACCESS_KEY, { expiresIn: expirationTime });
+               token = token.replaceAll('.', '*');
+               //http://localhost:3000
+               //https://auth-two-nu.vercel.app
                const html = `<a href="https://auth-two-nu.vercel.app/auth/reset-password/${token}">verify password</a>`
                await sendMail(body?.email, "verify password", html);
                req.flash('msg', "vui lòng Kiểm tra email để đổi password");
           } catch (err) {
+               // console.log(err);
                if (err?.inner?.length) {
                     const error = err?.inner[0]?.message;
                     req.flash('error', error);
@@ -246,24 +246,43 @@ module.exports = {
           return res.redirect('/auth/reset-password');
 
      },
-     newPassword: (req, res, next) => {
-          const { token } = req.params;
-          jwt.verify(token, process.env.JWT_ACCESS_KEY, async (err, data) => {
-               if (err) {
-                    return next(new Error("url hết hạn"));
-               } else {
-                    res.render('auth/newPassword', { req });
+     newPassword: async (req, res, next) => {
+          let { token } = req.params;
+          token = token.replaceAll('*', '.');
+          // console.log(token);
+          const blackList = await BlackList.findOne({
+               where: {
+                    token
                }
-          });
+          })
+          if (blackList) {
+               return next(new Error("url không tồn tại"));
+          } else {
+               jwt.verify(token, process.env.JWT_ACCESS_KEY, async (err, data) => {
+                    if (err) {
+
+                         return next(new Error("url hết hạn"));
+                    } else {
+
+                         res.render('auth/newPassword', { req });
+                    }
+               });
+
+          }
+
 
      },
      handleNewPassword: async (req, res) => {
-          const { token } = req.params;
+          let { token } = req.params;
+
+          token = token.replaceAll('*', '.');
           jwt.verify(token, process.env.JWT_ACCESS_KEY, async (err, data) => {
                if (err) {
+
                     req.flash("msgError", "lỗi không thể đổi mật khẩu");
-                    return res.redirect('/auth/rest-password');
+                    return res.redirect('/auth/reset-password');
                } else {
+
                     const { email } = data;
                     try {
                          const schema = object({
@@ -297,12 +316,21 @@ module.exports = {
 
                               }
                          });
+                         await BlackList.findOrCreate({
+                              where: {
+                                   token
+                              },
+                              defaults: {
+                                   token
+                              }
+                         })
                          req.flash('msg', 'đổi mật khẩu thành công Vui lòng đăng nhập lại');
                          return res.redirect('/auth/dang-nhap');
                     } catch (err) {
+                         token = token.replaceAll('.', '*');
                          const errors = Object.fromEntries(err?.inner.map(({ path, message }) => [path, message]));
                          req.flash('errors', errors);
-                         return res.redirect(`/auth/rest-password/${email}?token=${token}`);
+                         return res.redirect(`/auth/reset-password/${token}`);
                     }
 
                }

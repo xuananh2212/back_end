@@ -1,0 +1,154 @@
+<div class="flex-grow-1">
+     <h1> Cập nhật Role</h1>
+     <% if (error.length) { %>
+          <p class="alert alert-danger">
+               <%= error %>
+          </p>
+
+          <% } %>
+               <% if (success.length) { %>
+                    <p class="alert alert-success">
+                         <%= success %>
+                    </p>
+                    <% } %>
+                         <div class="mt-3">
+                              <select class="form-select" aria-label="Default select example" name="roles"
+                                   id="redirectSelect">
+                                   <option value="0">
+                                        Chọn role
+                                   </option>
+                                   <% roles.forEach(({id, name})=> { %>
+                                        <option value="/roles/edit/<%= id %>">
+                                             <%= name %>
+                                        </option>
+
+                                        <% }) %>
+                              </select>
+                         </div>
+                         <form class="form" method="post">
+                              <div class="group-form mt-3">
+                                   <label for="name">
+                                        Tên:
+                                        <input value="<%= roleCurrent?.name %>" class="form-control" type="text"
+                                             name="name" id="name">
+                                   </label>
+                              </div>
+                              <div class="group-form">
+                                   <table class="table table-bordered mt-3">
+                                        <thead>
+                                             <tr>
+                                                  <th width="5%">STT</th>
+                                                  <th width="25%">Module</th>
+                                                  <th>Quyền</th>
+
+                                             </tr>
+                                        </thead>
+                                        <tbody>
+
+                                             <tr>
+                                                  <td>
+                                                       1
+                                                  </td>
+                                                  <td>
+                                                       Quản lý User
+                                                  </td>
+                                                  <td>
+                                                       <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="user-read"
+                                                                      value="user-read"
+                                                                      <%=checkPermission(roleCurrent.Permissions, 'user-read'
+                                                                      ) ? 'checked' : '' %>>
+                                                                 <label class="form-check-label"
+                                                                      for="user-read">Xem</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="user-add"
+                                                                      value="user-add"
+                                                                      <%=checkPermission(roleCurrent.Permissions, 'user-add'
+                                                                      ) ? 'checked' : '' %>>
+                                                                 <label class="form-check-label"
+                                                                      for="user-add">Thêm</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="user-edit"
+                                                                      value="user-edit"
+                                                                      <%=checkPermission(roleCurrent.Permissions, 'user-edit'
+                                                                      ) ? 'checked' : '' %>>
+                                                                 <label class="form-check-label"
+                                                                      for="user-edit">Sửa</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="user-delete"
+                                                                      value="user-delete"
+                                                                      <%=checkPermission(roleCurrent.Permissions, 'user-delete'
+                                                                      ) ? 'checked' : '' %>>
+                                                                 <label class="form-check-label"
+                                                                      for="user-delete">Xoá</label>
+                                                            </div>
+
+                                                       </div>
+                                                  </td>
+
+                                             </tr>
+                                             <tr>
+                                                  <td>
+                                                       2
+                                                  </td>
+                                                  <td>
+                                                       Quản lý Role
+                                                  </td>
+                                                  <td>
+                                                       <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="role-read"
+                                                                      value="role-read"
+                                                                      <%=checkPermission(roleCurrent.Permissions, 'role-read'
+                                                                      ) ? 'checked' : '' %>>
+                                                                 <label class="form-check-label"
+                                                                      for="role-read">Xem</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="role-add"
+                                                                      value="role-add"
+                                                                      <%=checkPermission(roleCurrent.Permissions, 'role-add'
+                                                                      ) ? 'checked' : '' %>>
+                                                                 <label class="form-check-label"
+                                                                      for="role-add">Thêm</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="role-edit"
+                                                                      value="role-edit"
+                                                                      <%=checkPermission(roleCurrent.Permissions, 'role-edit'
+                                                                      ) ? 'checked' : '' %>>
+                                                                 <label class="form-check-label"
+                                                                      for="role-edit">Sửa</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="role-delete"
+                                                                      value="role-delete"
+                                                                      <%=checkPermission(roleCurrent.Permissions, 'role-delete'
+                                                                      ) ? 'checked' : '' %>>
+                                                                 <label class="form-check-label"
+                                                                      for="role-delete">Xoá</label>
+                                                            </div>
+
+                                                       </div>
+                                                  </td>
+
+                                             </tr>
+                                        </tbody>
+                                   </table>
+                                   <button class="btn btn-primary">Save</button>
+                                   <a href="/roles" class="btn btn-warning">Quay lại</a>
+                              </div>
+                         </form>
+</div>

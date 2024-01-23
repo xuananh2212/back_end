@@ -10,15 +10,23 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      // User.hasMany(models.Device, {foreignKey: "userId"})
       User.belongsToMany(models.Device, {
         through: models.UserDevice,
         foreignKey: "userId"
-      })
+      });
       User.belongsTo(models.Provider, {
         foreignKey: "providerId"
-      })
+      });
+      User.belongsToMany(models.Permission,
+        {
+          through: 'User_Permissions',
+          foreignKey: 'userId'
+        });
+      User.belongsToMany(models.Role
+        , {
+          through: 'User_Roles',
+          foreignKey: 'userId'
+        });
     }
   }
   User.init({
@@ -31,7 +39,6 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     status: DataTypes.INTEGER,
-    isAdmin: DataTypes.BOOLEAN,
     providerId: DataTypes.INTEGER,
   }, {
     sequelize,

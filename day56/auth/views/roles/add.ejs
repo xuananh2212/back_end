@@ -1,0 +1,124 @@
+<div class="flex-grow-1">
+     <h1>Thêm Role</h1>
+     <% if (error.length) { %>
+          <p class="alert alert-danger">
+               <%= error %>
+          </p>
+
+          <% } %>
+               <% if (success.length) { %>
+                    <p class="alert alert-success">
+                         <%= success %>
+                    </p>
+                    <% } %>
+                         <form class="form" action="" method="post">
+                              <div class="group-form">
+                                   <label for="name">
+                                        Tên:
+                                        <input class="form-control" type="text" name="name" id="name">
+                                   </label>
+                              </div>
+                              <div class="group-form">
+                                   <table class="table table-bordered mt-3">
+                                        <thead>
+                                             <tr>
+                                                  <th width="5%">STT</th>
+                                                  <th width="25%">Module</th>
+                                                  <th>Quyền</th>
+
+                                             </tr>
+                                        </thead>
+                                        <tbody>
+
+                                             <tr>
+                                                  <td>
+                                                       1
+                                                  </td>
+                                                  <td>
+                                                       Quản lý User
+                                                  </td>
+                                                  <td>
+                                                       <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="user-read"
+                                                                      value="user-read">
+                                                                 <label class="form-check-label"
+                                                                      for="user-read">Xem</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="user-add"
+                                                                      value="user-add">
+                                                                 <label class="form-check-label"
+                                                                      for="user-add">Thêm</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="user-edit"
+                                                                      value="user-edit">
+                                                                 <label class="form-check-label"
+                                                                      for="user-edit">Sửa</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="user-delete"
+                                                                      value="user-delete">
+                                                                 <label class="form-check-label"
+                                                                      for="user-delete">Xoá</label>
+                                                            </div>
+
+                                                       </div>
+                                                  </td>
+
+                                             </tr>
+                                             <tr>
+                                                  <td>
+                                                       2
+                                                  </td>
+                                                  <td>
+                                                       Quản lý Role
+                                                  </td>
+                                                  <td>
+                                                       <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="role-read"
+                                                                      value="role-read">
+                                                                 <label class="form-check-label"
+                                                                      for="role-read">Xem</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="role-add"
+                                                                      value="role-add">
+                                                                 <label class="form-check-label"
+                                                                      for="role-add">Thêm</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="role-edit"
+                                                                      value="role-edit">
+                                                                 <label class="form-check-label"
+                                                                      for="role-edit">Sửa</label>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                 <input class="form-check-input" name="permission"
+                                                                      type="checkbox" role="switch" id="role-delete"
+                                                                      value="role-delete">
+                                                                 <label class="form-check-label"
+                                                                      for="role-delete">Xoá</label>
+                                                            </div>
+
+                                                       </div>
+                                                  </td>
+
+                                             </tr>
+                                        </tbody>
+                                   </table>
+                                   <a href="/roles" class="btn btn-warning">Quay lại</a>
+                                   <button class="btn btn-primary">Save</button>
+                              </div>
+                         </form>
+
+</div>

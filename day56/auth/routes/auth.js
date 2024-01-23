@@ -13,7 +13,7 @@ router.post('/dang-nhap', authController.handleLogin);
 router.get('/dang-ki', authMiddleWare.loginAndRegister, authController.register);
 router.post('/dang-ki', authController.handleRegister);
 
-router.post('/dang-xuat', authMiddleWare.handleLogOut, authController.logOut);
+router.get('/dang-xuat', authMiddleWare.handleLogOut, authController.logOut);
 
 router.get('/reset-password', authMiddleWare.loginAndRegister, authController.forgotPassword);
 router.post('/reset-password', authController.handleForgotPassword);
@@ -35,14 +35,12 @@ router.get('/google/callback',
           if (user?.status === 1) {
                const accessToken = jwt.sign({
                     id: user.id,
-                    isAdmin: user.isAdmin,
                     email: user.email
                }, process.env.JWT_ACCESS_KEY, {
                     expiresIn: '1h'
                })
                const refreshToken = jwt.sign({
                     id: user.id,
-                    isAdmin: user.isAdmin,
                     email: user.email
                }, process.env.JWT_REFRESH_KEY, {
                     expiresIn: '1h'

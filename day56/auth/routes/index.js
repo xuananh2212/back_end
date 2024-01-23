@@ -1,10 +1,16 @@
 var express = require('express');
 var router = express.Router();
+const { User } = require('../models/index');
 
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  const user = req.user;
+router.get('/', async function (req, res, next) {
+  const { user: { id } } = req;
+  const user = await User.findOne({
+    where: {
+      id
+    }
+  })
   res.render('index', { user });
 });
 
