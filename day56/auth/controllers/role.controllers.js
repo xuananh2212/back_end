@@ -140,7 +140,7 @@ module.exports = {
                                    value: permission[i]
                               }
                          });
-                         permissionSelects.push(permissionFind);
+                         permissionSelects.push(permissionFind[0]);
                     }
                     console.log(permissionSelects);
                     await role?.setPermissions(permissionSelects);
