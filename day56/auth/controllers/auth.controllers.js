@@ -205,7 +205,7 @@ module.exports = {
           const msg = req.flash('msg');
           const error = req.flash('error');
           const msgError = req.flash("msgError");
-          res.render('auth/forgotPassword', { req, error, msg, msgError });
+          res.render('auth/forgotPassword', { req, error, msg, msgError, layout: 'auth/layout.ejs' });
      }
      ,
      handleForgotPassword: async (req, res) => {
@@ -264,7 +264,7 @@ module.exports = {
                          return next(new Error("url hết hạn"));
                     } else {
 
-                         res.render('auth/newPassword', { req });
+                         res.render('auth/newPassword', { req, layout: 'auth/layout.ejs' });
                     }
                });
 

@@ -2,61 +2,68 @@
      <h1>Danh sách người dùng</h1>
      <a href="/users/add" class="btn btn-primary mt-2 mb-2">Add</a>
      <hr>
-     <table class="table table-bordered mt-3">
-          <thead>
-               <tr>
-                    <th>STT</th>
-                    <th>Tên</th>
-                    <th>Email</th>
-                    <th>Phân quyền</th>
-                    <th width="5%">Sửa</th>
-                    <th width="5%">Xoá</th>
-               </tr>
-          </thead>
-          <tbody>
-               <% users.forEach(({id, name, email, status, created_at, Phone, group}, index)=> { %>
-                    <tr>
-                         <td>
-                              <%= index + 1 %>
-                         </td>
-                         <td>
-                              <%= name %>
-                         </td>
-                         <td>
-                              <%= email %>
-                         </td>
-                         <td>
+     <% if (success.length) { %>
+          <p class="alert alert-success">
+               <%= success %>
+          </p>
+          <% } %>
+               <table class="table table-bordered mt-3">
+                    <thead>
+                         <tr>
+                              <th>STT</th>
+                              <th>Tên</th>
+                              <th>Email</th>
+                              <th>Phân quyền</th>
+                              <th width="5%">Sửa</th>
+                              <th width="5%">Xoá</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         <% users.forEach(({id, name, email, status, created_at, Phone, group}, index)=> { %>
+                              <tr>
+                                   <td>
+                                        <%= index + 1 %>
+                                   </td>
+                                   <td>
+                                        <%= name %>
+                                   </td>
+                                   <td>
+                                        <%= email %>
+                                   </td>
+                                   <td class="d-flex justify-content-center">
 
-                         </td>
-                         <td>
-                              <a class="btn btn-warning" href=<%=`/users/edit/${id}` %> > Sửa </a>
-                         </td>
-                         <td>
-                              <form action="/users/delete/<%= id %>" method="post"
-                                   onsubmit="return confirm('ban co chac chan ?')">
-                                   <button class="btn btn-danger"> Xoá </button>
-                              </form>
+                                        <a class="btn btn-info" href=<%=`/users/role-permission/${id}`%>>Phân Quyền</a>
+                                   </td>
+                                   <td>
+                                        <a class="btn btn-warning" href=<%=`/users/edit/${id}` %> > Sửa </a>
+                                   </td>
+                                   <td>
+                                        <form action="/users/delete/<%= id %>" method="post"
+                                             onsubmit="return confirm('bạn có chắc chắn muốn xoá ?')">
+                                             <button class="btn btn-danger"> Xoá </button>
+                                        </form>
 
-                         </td>
-                    </tr>
-                    <% }) %>
+                                   </td>
+                              </tr>
+                              <% }) %>
 
-          </tbody>
-     </table>
+                    </tbody>
+               </table>
 
-     <nav aria-label="Page navigation example">
-          <ul class="pagination">
-               <% if (page> 1) { %>
-                    <li class="page-item"><a class="page-link" href="?page=<%= +page - 1 %>">Previous</a></li>
-                    <% } %>
-                         <% for( let index=1; index < totalPage; index++ ) { %>
-                              <li class="page-item" <%=page===index ? 'active' : '' %>><a class="page-link"
-                                        href="?page=<%= index %>">
-                                        <%= index %>
-                                   </a></li>
+               <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                         <% if (page> 1) { %>
+                              <li class="page-item"><a class="page-link" href="?page=<%= +page - 1 %>">Previous</a></li>
                               <% } %>
-                                   <li class="page-item"><a class="page-link" href="?page=<%= +page + 1 %>">Next</a>
-                                   </li>
-          </ul>
-     </nav>
+                                   <% for( let index=1; index < totalPage; index++ ) { %>
+                                        <li class="page-item" <%=page===index ? 'active' : '' %>><a class="page-link"
+                                                  href="?page=<%= index %>">
+                                                  <%= index %>
+                                             </a></li>
+                                        <% } %>
+                                             <li class="page-item"><a class="page-link"
+                                                       href="?page=<%= +page + 1 %>">Next</a>
+                                             </li>
+                    </ul>
+               </nav>
 </div>

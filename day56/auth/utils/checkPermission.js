@@ -4,4 +4,6 @@ module.exports = function (permissions, value) {
           console.log(valuePermissions, value, valuePermissions.includes(value));
           return valuePermissions.includes(value);
      }
+     return false;
+
 }
