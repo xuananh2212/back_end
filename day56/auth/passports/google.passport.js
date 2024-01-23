@@ -2,35 +2,7 @@ require('dotenv').config();
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/index').User;
 const Provider = require('../models/index').Provider;
-async function handleProvider(profile) {
-     const provider = await Provider.findOne({
-          where: {
-               name: profile?.provider
-          }
-     })
-     let user = null;
-     if (!provider) {
-          user = await User.create({
-               name: profile?.displayName,
-               password: null,
-               email: profile?.emails[0].value,
-               Provider: {
-                    name: profile?.provider
-               }
-          },
-               {
-                    include: [Provider]
-               })
-     } else {
-          user = await User.create({
-               name: profile?.displayName,
-               password: null,
-               email: profile?.emails[0].value,
-               providerId: provider.id
-          })
-     }
-     return user;
-}
+
 module.exports = new GoogleStrategy({
      clientID: process.env.CLIENT_ID,
      clientSecret: process.env.CLIENT_SECRET,
@@ -38,35 +10,33 @@ module.exports = new GoogleStrategy({
      scope: ['profile'],
      state: true
 }, async function (accessToken, refreshToken, profile, done) {
-     let email = "";
-     if (Array.isArray(profile?.emails[0])) {
-          email = profile?.emails[0];
-     }
+     // if (Array.isArray(profile?.emails)) {
+     //      email = profile?.emails[0].value;
+     // }
+     const { emails: [{ value: email }] } = profile;
      try {
-          const user = await User.findOne({
+          const providerFind = await Provider.findOrCreate({
                where: {
-                    email
+                    name: profile?.provider
+
                },
-               include: Provider
-          });
-          let userNew = null;
-          if (!user) {
-               userNew = await handleProvider(profile);
-               done(null, userNew);
-          } else {
-               if (user?.Provider) {
-                    const { name } = user.Provider;
-                    if (name !== profile?.provider) {
-                         userNew = await handleProvider(profile);
-                         done(null, userNew);
-                    } else {
-                         done(null, user);
-                    }
-               } else {
-                    userNew = await handleProvider(profile);
-                    done(null, userNew);
+               defaults: {
+                    name: profile?.provider
                }
-          }
+          });
+          const user = await User.findOrCreate({
+               where: {
+                    email,
+                    providerId: providerFind[0].id
+
+               },
+               defaults: {
+                    name: profile?.displayName,
+                    email,
+                    providerId: providerFind[0].id
+               }
+          });
+          done(null, user[0]);
      } catch (err) {
           done(err, {});
      }

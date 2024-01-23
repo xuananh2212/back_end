@@ -124,26 +124,30 @@ module.exports = {
                     if (typeof permission === 'string') {
                          permission = [permission];
                     }
-                    console.log(permission);
                     await Role.update({ name },
                          {
                               where: {
                                    id
                               }
-                         })
-                    const permissionSelects = await Promise.all(
-                         permission.map((value) => Permission.findOne({
+                         });
+                    const permissionSelects = [];
+                    for (let i = 0; i < permission.length; i++) {
+                         const permissionFind = await Permission.findOrCreate({
                               where: {
-                                   value
+                                   value: permission[i]
+                              },
+                              defaults: {
+                                   value: permission[i]
                               }
-                         }))
-                    );
+                         });
+                         permissionSelects.push(permissionFind);
+                    }
                     console.log(permissionSelects);
-                    const result = await role?.setPermissions(permissionSelects);
-                    // res.json(result);
+                    await role?.setPermissions(permissionSelects);
                     req.flash('success', 'cập nhật role thành công');
                }
           } catch (err) {
+               console.log(err);
                const error = err?.message;
                req.flash('error', error);
           }
