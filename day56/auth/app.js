@@ -15,6 +15,7 @@ var authRouter = require('./routes/auth');
 var profileRouter = require('./routes/profile');
 var userRouter = require('./routes/user');
 var roleRouter = require('./routes/role');
+var shortLinkRouter = require('./routes/shortLink');
 
 var validate = require('./middlewares/validate.message');
 var authMiddleWare = require('./middlewares/auth.middewares');
@@ -34,7 +35,6 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(validate);
-
 
 app.use(expressLayouts);
 app.use(logger('dev'));
@@ -58,6 +58,7 @@ app.use(indexRouter);
 app.use('/users', userRouter);
 app.use('/roles', roleRouter);
 app.use("/profile", profileRouter);
+app.use("/short-link", shortLinkRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

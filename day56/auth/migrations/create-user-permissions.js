@@ -18,7 +18,6 @@ module.exports = {
                          key: 'id'
                     },
                     allowNull: false
-
                },
                UserId: {
                     type: Sequelize.INTEGER,

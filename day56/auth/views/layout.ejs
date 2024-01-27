@@ -12,7 +12,8 @@
           crossorigin="anonymous" referrerpolicy="no-referrer" />
      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-     <title>auth</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <title>Bài Tập Về Nhà</title>
 </head>
 
 <body>
@@ -21,6 +22,7 @@
                <div class="nav flex-column gap-4 nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical"
                     style="min-width: 250px;">
                     <a class="nav-link" id="home" href="/">Trang chủ</a>
+                    <a class="nav-link" id="short-link" href="/short-link">Rút gọn link</a>
                     <a class="nav-link" id="users" href="/users">Quản lý người dùng</a>
                     <a class="nav-link" id="roles" href="/roles">Quản lý Role</a>
                     <a class="nav-link" id="profiles" href="/profile/basic-information">Thông tin cá nhân</a>
@@ -32,9 +34,10 @@
                <%- body %>
           </div>
      </main>
+     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
-<script>
+<script type="text/javascript">
      $(document).ready(function () {
           $("#redirectSelect").change(function () {
                var selectedValue = $(this).val();
@@ -49,6 +52,27 @@
                });
           });
      });
+     $(document).ready(function () {
+          // When the checkbox state changes
+          $("#urlId").change(function () {
+               if ($(this).is(":checked")) {
+                    // Show the div if the checkbox is checked
+                    $("#show-url").show();
+               } else {
+                    // Hide the div if the checkbox is not checked
+                    $("#show-url").hide();
+               }
+          });
+     });
+     $('#openOverlay').click(function () {
+
+          $('#overlay').addClass('opened');
+     })
+     $('#closeOverlay').click(function () {
+
+          $('#overlay').removeClass('opened');
+     })
+
 </script>
 
 </html>

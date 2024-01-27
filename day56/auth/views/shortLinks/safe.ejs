@@ -1,0 +1,15 @@
+<div class="flex-grow-1">
+     <h1>Chuyển hướng an toàn</h1>
+     <div class="d-grid gap-2">
+          <a href="<%= urlAll?.url %>" class="btn btn-primary" target="_blank">Nhấn vào đây để tiếp tục</a>
+          <a href="<%= urlAll?.urlFacebook %>" class="btn btn-primary" target="_blank">Chia sẻ lên Facebook</a>
+          <button id="openOverlay" class="btn btn-primary">Gửi tới điện thoại(OR code)</button>
+          <a href="/short-link" class="btn btn-primary" target="_blank">Rút gọn liên kết mới</a>
+     </div>
+</div>
+<div id="overlay">
+     <div id="overlayContent">
+          <img src="<%= urlAll?.urlQrc %>" alt="qrc" width="300px" height="300px">
+          <button id="closeOverlay">X</button>
+     </div>
+</div>

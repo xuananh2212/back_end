@@ -120,7 +120,7 @@ module.exports = {
                }
                return res.redirect('/');
           } catch (e) {
-               // console.log(e);
+               console.log(e);
                const errors = Object.fromEntries(e?.inner?.map((item) => [item.path, item.message]));
                req.flash('errors', errors);
                req.flash('old', req.body);
@@ -231,8 +231,6 @@ module.exports = {
                const expirationTime = Math.floor(Date.now() / 1000) + 15 * 60;
                let token = jwt.sign({ email: body?.email }, process.env.JWT_ACCESS_KEY, { expiresIn: expirationTime });
                token = token.replaceAll('.', '*');
-               //http://localhost:3000
-               //https://auth-two-nu.vercel.app
                const html = `<a href="https://auth-two-nu.vercel.app/auth/reset-password/${token}">verify password</a>`
                await sendMail(body?.email, "verify password", html);
                req.flash('msg', "vui lòng Kiểm tra email để đổi password");
